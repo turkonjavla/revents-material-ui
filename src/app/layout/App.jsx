@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 
+/* Components */
+import EventDashboard from '../../features/event/EventDashboard/EventDashboard';
+import NavBar from '../../features/nav/NavBar/NavBar';
+
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <h1>Helasdasdlo world</h1>
+      <div>
+        <NavBar />
+        <EventDashboard />
       </div>
     );
   }
