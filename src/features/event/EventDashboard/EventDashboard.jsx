@@ -5,16 +5,17 @@ import Grid from '@material-ui/core/Grid';
 
 /* Components */
 import EventList from '../EventList/EventList';
+import EventForm from '../EventForm/EventForm';
 
 class EventDashboard extends Component {
   render() {
     return (
-      <Grid container spacing={24}>
-        <Grid container justify="center" align="center" item sm={8} xs={12}>
+      <Grid container>
+        <Grid container justify="center" align="center" item sm={6} xs={12}>
           <EventList />
       </Grid>
-        <Grid item sm={4} xs={12}>
-          Right Pane
+        <Grid container justify="center" align="center" item sm={6} xs={12}>
+          <EventForm />
       </Grid>
       </Grid>
     )
