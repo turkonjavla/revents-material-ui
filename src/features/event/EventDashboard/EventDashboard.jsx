@@ -4,11 +4,12 @@ import React, { Component, Fragment } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 /* Components */
 import EventList from '../EventList/EventList';
 import EventForm from '../EventForm/EventForm';
-import EventHeadline from './EventHeadline';
 
 const events = [
   {
@@ -84,22 +85,51 @@ class EventDashboard extends Component {
     isOpen: false
   }
 
+  handleFormOpen = () => {
+    this.setState({
+      isOpen: true
+    })
+  }
+
+  handleCancelForm = () => {
+    this.setState({
+      isOpen: false
+    })
+  }
+
   render() {
     const { classes } = this.props;
-    const { events } = this.state;
+    const { events, isOpen } = this.state;
     return (
       <Fragment>
         <CssBaseline />
         <div className={classes.root}>
           <Grid container justify="center">
             <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
-              <EventHeadline />
+              <Grid item xs={12}>
+                <div className={classes.topBar}>
+                  <div className={classes.block}>
+                    <Typography variant="h6" gutterBottom>Events</Typography>
+                    <Typography variant="body1">
+                      Check out upcoming events.
+                    </Typography>
+                  </div>
+                  <div>
+                    <Button onClick={this.handleFormOpen} variant="contained" color="primary">
+                      Create Event
+                    </Button>
+                  </div>
+                </div>
+              </Grid>
               <Grid container spacing={24} justify="center">
                 <Grid item xs={12} md={8}>
                   <EventList events={events} />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <EventForm />
+                  {
+                    isOpen &&
+                    <EventForm handleCancelForm={this.handleCancelForm} />
+                  }
                 </Grid>
               </Grid>
             </Grid>
