@@ -92,10 +92,11 @@ class NavBar extends Component {
             onKeyDown={this.handleDrawerToggle('left', false)}
           >
             <ListItem button>
-              <ListItemIcon><AddIcon /></ListItemIcon>
               <ListItemText primary="Create Event" />
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
             </ListItem>
-
           </div>
         </Drawer>
       </div>
