@@ -74,7 +74,7 @@ class EventListItem extends Component {
             <LocationIcon /> {venue} | {city}
           </Typography>
         </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
+        <CardActions className={classes.actions}>
           <Button color="primary">Learn More</Button>
           <Button color="secondary">Remove</Button>
           <IconButton
