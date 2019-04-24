@@ -8,6 +8,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { CardActions } from '@material-ui/core';
 
 const styles = theme => ({
   paper: {
@@ -19,7 +20,7 @@ const styles = theme => ({
 
 class EventForm extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, handleCancelForm } = this.props;
     return (
       <Paper className={classes.paper} style={{ position: 'relative' }}>
         <form>
@@ -42,14 +43,17 @@ class EventForm extends Component {
             <InputLabel htmlFor="hostedBy">Hosted By</InputLabel>
             <Input name="hostedBy" type="test" />
           </FormControl>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
-            Create Event
+          <CardActions style={{ justifyContent: 'center' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Create Event
           </Button>
+            <Button onClick={handleCancelForm}>Cancel</Button>
+          </CardActions>
+
         </form>
       </Paper>
     )
