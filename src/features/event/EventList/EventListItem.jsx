@@ -12,24 +12,18 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import LocationIcon from '@material-ui/icons/LocationOn';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
+import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import GridList from '@material-ui/core/GridList';
 
 /* Components */
 import EventListAttendee from './EventListAttendee';
 
 const styles = theme => ({
   card: {
-    maxWidth: 800,
-    marginTop: 30
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  actions: {
-    display: 'flex',
+    marginBottom: 30,
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -40,10 +34,7 @@ const styles = theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
+  }
 });
 
 class EventListItem extends Component {
@@ -54,27 +45,34 @@ class EventListItem extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, } = this.props;
+    const { title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
+    const attendeeList = attendees.map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
     return (
-      <Card className={classes.card}>
+      <Card style={{ marginBottom: '2em' }}>
         <CardHeader
           align="left"
           avatar={
             <Avatar
-              src="https://randomuser.me/api/portraits/women/42.jpg"
+              src={hostPhotoURL}
               aria-label="Recipe"
               className={classes.avatar}
             >
             </Avatar>
           }
-          title="Shrimp and Chorizo Paella"
-          subheader={"September 14, 2016 || time"}
+          title={title}
+          subheader={date}
         />
         <CardContent>
           <Typography align="left" component="p">
-            This impressive paella is a perfect party dish and a fun meal to cook together with your
-            guests. Add 1 cup of frozen peas along with the mussels, if you like.
-        </Typography>
+            {description}
+          </Typography>
+        </CardContent>
+        <Divider variant="middle" />
+        <CardContent>
+          <Typography align="left" component="p">
+            <LocationIcon /> {venue} | {city}
+          </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <Button color="primary">Learn More</Button>
@@ -92,7 +90,12 @@ class EventListItem extends Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <EventListAttendee />
+            <Typography align="left" variant="subtitle1" gutterBottom>
+              Attendees
+            </Typography>
+            <GridList className={classes.gridList} cols={10}>
+              {attendeeList}
+            </GridList>
           </CardContent>
         </Collapse>
       </Card>
