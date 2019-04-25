@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 
 /* Material UI Components */
 import IconButton from '@material-ui/core/IconButton';
@@ -32,7 +33,7 @@ class SignedInLinks extends Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { signOut } = this.props;
+    const { signOut, location: { pathname } } = this.props;
     const open = Boolean(anchorEl);
 
     return (
@@ -59,7 +60,7 @@ class SignedInLinks extends Component {
           open={open}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>
+          <MenuItem onClick={this.handleClose} component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
@@ -87,7 +88,7 @@ class SignedInLinks extends Component {
             <ListItemText inset primary="My Profile" />
           </MenuItem>
 
-          <MenuItem onClick={this.handleClose} component={Link} to="/settings">
+          <MenuItem onClick={this.handleClose} component={Link} to="/settings" selected={'/settings/basic' === pathname}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
@@ -106,4 +107,4 @@ class SignedInLinks extends Component {
   }
 }
 
-export default SignedInLinks;
+export default withRouter(SignedInLinks);
