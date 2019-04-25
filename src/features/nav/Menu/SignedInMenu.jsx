@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 /* Material UI Components */
 import IconButton from '@material-ui/core/IconButton';
@@ -58,35 +59,35 @@ class SignedInLinks extends Component {
           open={open}
           onClose={this.handleClose}
         >
-          <MenuItem>
+          <MenuItem onClick={this.handleClose}>
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
             <ListItemText inset primary="Create Event" />
           </MenuItem>
 
-          <MenuItem>
+          <MenuItem onClick={this.handleClose}>
             <ListItemIcon>
               <CalendarTodayIcon />
             </ListItemIcon>
             <ListItemText inset primary="My Events" />
           </MenuItem>
 
-          <MenuItem>
+          <MenuItem onClick={this.handleClose}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText inset primary="My Network" />
           </MenuItem>
 
-          <MenuItem>
+          <MenuItem onClick={this.handleClose}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText inset primary="My Profile" />
           </MenuItem>
 
-          <MenuItem>
+          <MenuItem onClick={this.handleClose} component={Link} to="/settings">
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
