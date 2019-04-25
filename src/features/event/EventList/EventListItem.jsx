@@ -45,7 +45,7 @@ class EventListItem extends Component {
   };
 
   render() {
-    const { classes, } = this.props;
+    const { classes, onEventOpen, deleteEvent } = this.props;
     const { title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
     const attendeeList = attendees && attendees.map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
     return (
@@ -75,8 +75,8 @@ class EventListItem extends Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          <Button color="primary">Learn More</Button>
-          <Button color="secondary">Remove</Button>
+          <Button onClick={onEventOpen(this.props.event)} color="primary">Learn More</Button>
+          <Button onClick={deleteEvent(this.props.event.id)} color="secondary">Remove</Button>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
