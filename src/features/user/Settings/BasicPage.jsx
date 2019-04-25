@@ -8,4 +8,4 @@ const BasicPage = () => {
   )
 }
 
-export default BasicPage
+export default BasicPage;
