@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +14,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
+import PeopleIcon from '@material-ui/icons/People';
 import Drawer from '@material-ui/core/Drawer';
 
 /* Components */
@@ -24,6 +27,7 @@ const styles = {
   },
   grow: {
     flexGrow: 1,
+    textDecoration: 'none'
   },
   menuButton: {
     marginLeft: -1,
@@ -37,7 +41,8 @@ const styles = {
 class NavBar extends Component {
   state = {
     auth: false,
-    left: false
+    left: false,
+    selectedIndex: 1
   }
 
   handleSignIn = () => {
@@ -58,8 +63,12 @@ class NavBar extends Component {
     })
   }
 
+  handleListItemClick = (event, index) => {
+    this.setState({ selectedIndex: index });
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, location: { pathname } } = this.props;
     const { auth } = this.state;
     return (
       <div className={classes.root}>
@@ -73,9 +82,9 @@ class NavBar extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <Typography component={Link} to="/events" variant="h6" color="inherit" className={classes.grow}>
               Revents
-          </Typography>
+            </Typography>
             {
               auth ?
                 <SignedInLinks signOut={this.handleSignOut}
@@ -91,11 +100,18 @@ class NavBar extends Component {
             onClick={this.handleDrawerToggle('left', false)}
             onKeyDown={this.handleDrawerToggle('left', false)}
           >
-            <ListItem button>
-              <ListItemText primary="Create Event" />
+            <ListItem button component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
               <ListItemIcon>
                 <AddIcon />
               </ListItemIcon>
+              <ListItemText primary="Create Event" />
+            </ListItem>
+
+            <ListItem button component={Link} to="/people" selected={'/people' === pathname}>
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText primary="People Dashboard" />
             </ListItem>
           </div>
         </Drawer>
@@ -108,4 +124,7 @@ NavBar.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(NavBar);
+export default compose(
+  withStyles(styles),
+  withRouter
+)(NavBar);

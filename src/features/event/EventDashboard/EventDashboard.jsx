@@ -4,7 +4,6 @@ import cuid from 'cuid';
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
@@ -78,7 +77,7 @@ const styles = theme => ({
   block: {
     padding: theme.spacing.unit * 2,
   }
-})
+});
 
 class EventDashboard extends Component {
   state = {
@@ -150,7 +149,6 @@ class EventDashboard extends Component {
     const { events, isOpen, selectedEvent } = this.state;
     return (
       <Fragment>
-        <CssBaseline />
         <div className={classes.root}>
           <Grid container justify="center">
             <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
