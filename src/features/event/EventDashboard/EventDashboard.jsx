@@ -61,6 +61,7 @@ const events = [
     ]
   }
 ];
+
 const styles = theme => ({
   grid: {
     width: 1200,
