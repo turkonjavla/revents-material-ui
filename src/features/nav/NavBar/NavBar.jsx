@@ -18,8 +18,8 @@ import PeopleIcon from '@material-ui/icons/People';
 import Drawer from '@material-ui/core/Drawer';
 
 /* Components */
-import SignedOutLinks from '../Menu/SignedOutLinks';
-import SignedInLinks from '../Menu/SignedInLinks';
+import SignedOutMenu from '../Menu/SignedOutMenu';
+import SignedInMenu from '../Menu/SignedInMenu';
 
 const styles = {
   root: {
@@ -54,7 +54,8 @@ class NavBar extends Component {
   handleSignOut = () => {
     this.setState({
       auth: false
-    })
+    });
+    this.props.history.push('/')
   }
 
   handleDrawerToggle = (side, open) => () => {
@@ -87,9 +88,9 @@ class NavBar extends Component {
             </Typography>
             {
               auth ?
-                <SignedInLinks signOut={this.handleSignOut}
+                <SignedInMenu signOut={this.handleSignOut}
                 /> :
-                <SignedOutLinks signIn={this.handleSignIn} />
+                <SignedOutMenu signIn={this.handleSignIn} />
             }
           </Toolbar>
         </AppBar>
@@ -100,13 +101,15 @@ class NavBar extends Component {
             onClick={this.handleDrawerToggle('left', false)}
             onKeyDown={this.handleDrawerToggle('left', false)}
           >
-            <ListItem button component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              <ListItemText primary="Create Event" />
-            </ListItem>
-
+            {
+              auth &&
+              <ListItem button component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                <ListItemText primary="Create Event" />
+              </ListItem>
+            }
             <ListItem button component={Link} to="/people" selected={'/people' === pathname}>
               <ListItemIcon>
                 <PeopleIcon />
