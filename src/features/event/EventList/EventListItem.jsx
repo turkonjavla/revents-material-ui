@@ -47,7 +47,7 @@ class EventListItem extends Component {
   render() {
     const { classes, } = this.props;
     const { title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
-    const attendeeList = attendees.map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
+    const attendeeList = attendees && attendees.map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
     return (
       <Card style={{ marginBottom: '2em' }}>
         <CardHeader
@@ -93,7 +93,7 @@ class EventListItem extends Component {
             <Typography align="left" variant="subtitle1" gutterBottom>
               Attendees
             </Typography>
-            <GridList className={classes.gridList} cols={10}>
+            <GridList cols={10}>
               {attendeeList}
             </GridList>
           </CardContent>
