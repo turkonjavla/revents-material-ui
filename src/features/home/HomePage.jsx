@@ -13,13 +13,13 @@ const HomePage = ({ history: { push } }) => {
         Revents
       </Typography>
       <Typography variant="h6" align="center" style={{ marginTop: "1em" }}>
-        Share events with different people
+        Share events with other people.
         </Typography>
       <div style={{ width: "50%", margin: "0 auto", marginTop: "3em" }}>
         <Grid container spacing={8} align="center" >
           <Grid item xs={12}>
             <Button onClick={() => push('/events')} variant="outlined" color="primary">
-              Go to Revents <ChevronRightIcon />
+              Revents <ChevronRightIcon />
             </Button>
           </Grid>
         </Grid>
