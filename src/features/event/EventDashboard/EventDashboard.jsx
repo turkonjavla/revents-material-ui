@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import cuid from 'cuid';
 
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -15,7 +16,7 @@ const events = [
   {
     id: '1',
     title: 'Trip to Tower of London',
-    date: '2018-03-27T11:00:00+00:00',
+    date: '2018-03-27',
     category: 'culture',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt, quis scelerisque magna dapibus. Sed eget ipsum vel arcu vehicula ullamcorper.',
@@ -39,7 +40,7 @@ const events = [
   {
     id: '2',
     title: 'Trip to Punch and Judy Pub',
-    date: '2018-03-28T14:00:00+00:00',
+    date: '2018-03-28',
     category: 'drinks',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt, quis scelerisque magna dapibus. Sed eget ipsum vel arcu vehicula ullamcorper.',
@@ -82,12 +83,14 @@ const styles = theme => ({
 class EventDashboard extends Component {
   state = {
     events: events,
-    isOpen: false
+    isOpen: false,
+    selectedEvent: null
   }
 
   handleFormOpen = () => {
     this.setState({
-      isOpen: true
+      isOpen: true,
+      selectedEvent: null
     })
   }
 
@@ -97,9 +100,54 @@ class EventDashboard extends Component {
     })
   }
 
+  handleCreateEvent = newEvent => {
+    newEvent.id = cuid();
+    newEvent.hostPhotoURL = '/assets/user.png';
+    newEvent.attendees = [{
+      id: 'b',
+      name: 'Tom',
+      photoURL: 'https://randomuser.me/api/portraits/men/22.jpg'
+    }]
+    const updatedEvents = [...this.state.events, newEvent];
+
+    this.setState({
+      events: updatedEvents,
+      isOpen: false
+    })
+  }
+
+  handleOpenEvent = eventToOpen => () => {
+    this.setState({
+      selectedEvent: eventToOpen,
+      isOpen: true
+    })
+  }
+
+  handleUpdateEvent = updatedEvent => {
+    this.setState({
+      events: this.state.events.map(event => {
+        if (event.id === updatedEvent.id) {
+          return Object.assign({}, updatedEvent);
+        }
+        else {
+          return event
+        }
+      }),
+      isOpen: false,
+      selectedEvent: null
+    })
+  }
+
+  handleDeleteEvent = eventId => () => {
+    const updatedEvents = this.state.events.filter(event => event.id !== eventId);
+    this.setState({
+      events: updatedEvents
+    })
+  }
+
   render() {
     const { classes } = this.props;
-    const { events, isOpen } = this.state;
+    const { events, isOpen, selectedEvent } = this.state;
     return (
       <Fragment>
         <CssBaseline />
@@ -123,12 +171,21 @@ class EventDashboard extends Component {
               </Grid>
               <Grid container spacing={24} justify="center">
                 <Grid item xs={12} md={8}>
-                  <EventList events={events} />
+                  <EventList
+                    deleteEvent={this.handleDeleteEvent}
+                    onEventOpen={this.handleOpenEvent}
+                    events={events}
+                  />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   {
                     isOpen &&
-                    <EventForm handleCancelForm={this.handleCancelForm} />
+                    <EventForm
+                      updateEvent={this.handleUpdateEvent}
+                      selectedEvent={selectedEvent}
+                      createEvent={this.handleCreateEvent}
+                      handleCancelForm={this.handleCancelForm}
+                    />
                   }
                 </Grid>
               </Grid>

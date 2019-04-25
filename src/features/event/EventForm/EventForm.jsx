@@ -18,30 +18,82 @@ const styles = theme => ({
   }
 });
 
+const emptyEvent = {
+  title: '',
+  date: '',
+  city: '',
+  venue: '',
+  hostedBy: ''
+}
+
 class EventForm extends Component {
+  state = {
+    event: emptyEvent
+  }
+
+  componentDidMount() {
+    if (this.props.selectedEvent !== null) {
+      this.setState({
+        event: this.props.selectedEvent
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props.selectedEvent)
+    console.log('next', nextProps.selectedEvent)
+
+    if(nextProps.selectedEvent !== this.props.selectedEvent) {
+      this.setState({
+        event: nextProps.selectedEvent || emptyEvent
+      })
+    }
+  }
+
+  onFormSubmit = (e) => {
+    e.preventDefault();
+    if(this.state.event.id) {
+      this.props.updateEvent(this.state.event);
+    }
+    else {
+      this.props.createEvent(this.state.event);
+    }
+  }
+
+  onInputChange = (e) => {
+    const { name, value } = e.target;
+    const newEvent = this.state.event;
+    newEvent[name] = value;
+
+    this.setState({
+      event: newEvent
+    })
+  }
+
   render() {
     const { classes, handleCancelForm } = this.props;
+    const { title, date, city, venue, hostedBy } = this.state.event;
     return (
       <Paper className={classes.paper} style={{ position: 'relative' }}>
-        <form>
+        <form onSubmit={this.onFormSubmit}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="title">Event Title</InputLabel>
-            <Input autoComplete="title" autoFocus />
+            <Input name="title" onChange={this.onInputChange} value={title} autoComplete="title" autoFocus />
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <Input type="datetime-local" />
+          <FormControl margin="normal" fullWidth>
+            <Input name="date" value={date} onChange={this.onInputChange} type="date" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="city">City</InputLabel>
-            <Input name="city" type="text" />
+            <Input name="city" value={city} onChange={this.onInputChange} type="text" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="venue">Venue</InputLabel>
-            <Input name="venue" type="text" />
+            <Input name="venue" value={venue} onChange={this.onInputChange} type="text" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="hostedBy">Hosted By</InputLabel>
-            <Input name="hostedBy" type="test" />
+            <Input name="hostedBy" value={hostedBy} onChange={this.onInputChange} type="test" />
           </FormControl>
           <CardActions style={{ justifyContent: 'center' }}>
             <Button
