@@ -14,6 +14,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
+import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
 import Drawer from '@material-ui/core/Drawer';
 
@@ -101,6 +102,13 @@ class NavBar extends Component {
             onClick={this.handleDrawerToggle('left', false)}
             onKeyDown={this.handleDrawerToggle('left', false)}
           >
+
+            <ListItem button component={Link} to="/events" selected={'/events' === pathname}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
             {
               auth &&
               <ListItem button component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
@@ -110,11 +118,16 @@ class NavBar extends Component {
                 <ListItemText primary="Create Event" />
               </ListItem>
             }
+
             <ListItem button component={Link} to="/people" selected={'/people' === pathname}>
               <ListItemIcon>
                 <PeopleIcon />
               </ListItemIcon>
               <ListItemText primary="People Dashboard" />
+            </ListItem>
+
+            <ListItem button component={Link} to="/test" selected={'/test' === pathname}>
+              <ListItemText primary="Test Area" />
             </ListItem>
           </div>
         </Drawer>
