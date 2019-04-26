@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -46,7 +47,7 @@ class EventListItem extends Component {
 
   render() {
     const { classes, onEventOpen, deleteEvent } = this.props;
-    const { title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
+    const { id, title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
     const attendeeList = attendees && attendees.map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
     return (
       <Card style={{ marginBottom: '2em' }}>
@@ -75,7 +76,7 @@ class EventListItem extends Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          <Button onClick={onEventOpen(this.props.event)} color="primary">Learn More</Button>
+          <Button component={Link} to={`/event/${id}`} color="primary">Learn More</Button>
           <Button onClick={deleteEvent(this.props.event.id)} color="secondary">Remove</Button>
           <IconButton
             className={classnames(classes.expand, {
