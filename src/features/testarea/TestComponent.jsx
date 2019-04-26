@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 class TestComponent extends Component {
   render() {
     const { data } = this.props;
-    console.log(this.props)
     return (
       <div style={{padding: '4em'}}>
         <h1>Test Area</h1>
