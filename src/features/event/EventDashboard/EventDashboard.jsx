@@ -13,6 +13,9 @@ import Button from '@material-ui/core/Button';
 import EventList from '../EventList/EventList';
 import EventForm from '../EventForm/EventForm';
 
+/* Event Actions */
+import { createEvent, updateEvent, deleteEvent } from '../eventtActions';
+
 const styles = theme => ({
   grid: {
     width: 1200,
@@ -58,10 +61,10 @@ class EventDashboard extends Component {
       name: 'Tom',
       photoURL: 'https://randomuser.me/api/portraits/men/22.jpg'
     }]
-    const updatedEvents = [...this.state.events, newEvent];
+    
+    this.props.createEvent(newEvent);
 
     this.setState({
-      events: updatedEvents,
       isOpen: false
     })
   }
@@ -74,25 +77,15 @@ class EventDashboard extends Component {
   }
 
   handleUpdateEvent = updatedEvent => {
+    this.props.updateEvent(updatedEvent);
     this.setState({
-      events: this.state.events.map(event => {
-        if (event.id === updatedEvent.id) {
-          return Object.assign({}, updatedEvent);
-        }
-        else {
-          return event
-        }
-      }),
       isOpen: false,
       selectedEvent: null
     })
   }
 
   handleDeleteEvent = eventId => () => {
-    const updatedEvents = this.state.events.filter(event => event.id !== eventId);
-    this.setState({
-      events: updatedEvents
-    })
+    this.props.deleteEvent(eventId)
   }
 
   render() {
@@ -148,9 +141,15 @@ class EventDashboard extends Component {
 
 const mapStateToProps = state => ({
   events: state.events
-})
+});
+
+const actions = {
+  createEvent,
+  updateEvent,
+  deleteEvent
+}
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, actions),
   withStyles(styles)
 )(EventDashboard);
