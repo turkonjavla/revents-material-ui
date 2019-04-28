@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /* MUI Components */
 import Card from '@material-ui/core/Card';
@@ -34,7 +35,7 @@ const EventDetailsHeader = ({ event }) => {
         <Button size="small" color="primary" variant="contained">
           Join This Event
         </Button>
-        <Button size="small" color="secondary" variant="contained">
+        <Button component={Link} to={`/manage/${event.id}`} size="small" color="secondary" variant="contained">
           Manage Event
         </Button>
       </CardActions>
