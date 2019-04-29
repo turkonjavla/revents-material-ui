@@ -117,6 +117,28 @@ const EventDetailsChat = ({ classes }) => {
               }
             />
           </ListItem>
+          <ListItem alignItems="flex-start">
+            <ListItemAvatar>
+              <Avatar alt="Remy Sharp" src="/assets/user.png" />
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                `Phasellus pretium sed lacus in sagittis. Fusce lacus libero, euismod non lorem ut, 
+            convallis tempor tortor. Morbi quis tellus vitae augue ultrices tincidunt id vel diam. 
+            Sed vitae tempor tellus.`
+              }
+              secondary={
+                <React.Fragment>
+                  <Typography component="span" className={classes.inline} color="textPrimary">
+                    Ali Connor
+              </Typography>
+                  {
+                    ` — Just now`
+                  }
+                </React.Fragment>
+              }
+            />
+          </ListItem>
         </List>
 
         {/* End of nested list */}
