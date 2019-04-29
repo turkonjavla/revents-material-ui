@@ -2,17 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { reduxForm, Field } from 'redux-form';
+import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan } from 'revalidate';
+
+import moment from 'moment';
 import cuid from 'cuid';
 
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem';
+
+/* Form Inputs */
+import TextInput from '../../../app/common/form/TextInput';
+import SelectInput from '../../../app/common/form/SelectInput';
+import DateInput from '../../../app/common/form/DateInput';
 
 /* Event Actions */
 import { createEvent, updateEvent, deleteEvent } from '../eventtActions';
@@ -32,22 +40,42 @@ const styles = theme => ({
   }
 });
 
-class EventForm extends Component {
-  state = {
-    event: Object.assign({}, this.props.event)
-  }
+const category = [
+  { key: 'drinks', text: 'Drinks', value: 'drinks' },
+  { key: 'culture', text: 'Culture', value: 'culture' },
+  { key: 'film', text: 'Film', value: 'film' },
+  { key: 'food', text: 'Food', value: 'food' },
+  { key: 'music', text: 'Music', value: 'music' },
+  { key: 'travel', text: 'Travel', value: 'travel' },
+];
 
-  onFormSubmit = (e) => {
-    e.preventDefault();
-    if (this.state.event.id) {
-      this.props.updateEvent(this.state.event);
+const validate = combineValidators({
+  title: isRequired({ message: 'The event title is required' }),
+  category: isRequired({ message: 'Please provide a category' }),
+  description: composeValidators(
+    isRequired({ message: 'Please enter a description' }),
+    hasLengthGreaterThan(4)({ message: 'Description needs to be at least 5 characters' })
+  )(),
+  city: isRequired('City'),
+  venue: isRequired('Venue'),
+  date: isRequired('Date')
+});
+
+class EventForm extends Component {
+
+  onFormSubmit = values => {
+    values.date = moment(values.date).format();
+
+    if (this.props.initialValues.id) {
+      this.props.updateEvent(values);
       this.props.history.goBack();
     }
     else {
       const newEvent = {
-        ...this.state.event,
+        ...values,
         id: cuid(),
         hostPhotoURL: '/assets/user.png',
+        hostedBy: 'Ross',
         attendees: [
           {
             id: cuid(),
@@ -61,50 +89,79 @@ class EventForm extends Component {
     }
   }
 
-  onInputChange = (e) => {
-    const { name, value } = e.target;
-    const newEvent = this.state.event;
-    newEvent[name] = value;
-
-    this.setState({
-      event: newEvent
-    })
-  }
-
   render() {
-    const { classes } = this.props;
-    const { title, date, city, venue, hostedBy } = this.state.event;
+    const { classes, invalid, submitting, pristine } = this.props;
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
           <Grid container spacing={24} justify="center">
             <Grid item xs={12} md={8}>
               <Paper className={classes.paper} style={{ position: 'relative' }}>
-                <form onSubmit={this.onFormSubmit}>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="title">Event Title</InputLabel>
-                    <Input name="title" onChange={this.onInputChange} value={title} autoComplete="title" autoFocus />
-                  </FormControl>
-                  <FormControl margin="normal" fullWidth>
-                    <Input name="date" value={date} onChange={this.onInputChange} type="date" />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="city">City</InputLabel>
-                    <Input name="city" value={city} onChange={this.onInputChange} type="text" />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="venue">Venue</InputLabel>
-                    <Input name="venue" value={venue} onChange={this.onInputChange} type="text" />
-                  </FormControl>
-                  <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="hostedBy">Hosted By</InputLabel>
-                    <Input name="hostedBy" value={hostedBy} onChange={this.onInputChange} type="test" />
-                  </FormControl>
+                <form onSubmit={this.props.handleSubmit(this.onFormSubmit)}>
+                  <Typography
+                    variant="subtitle2"
+                    color="primary"
+                  >
+                    Event Details
+                  </Typography>
+
+                  <Field
+                    name="title"
+                    type="text"
+                    component={TextInput}
+                    label="Give your event a title"
+                  />
+                  <Field
+                    name="category"
+                    type="text"
+                    component={SelectInput}
+                  >
+                    {
+                      category.map(ctg => (
+                        <MenuItem key={ctg.key} value={ctg.value}>{ctg.text}</MenuItem>
+                      ))
+                    }
+                  </Field>
+                  <Field
+                    name="description"
+                    type="text"
+                    component={TextInput}
+                    multiline={true}
+                    rows={4}
+                    label="Tell us about your event"
+                  />
+
+                  <Typography
+                    variant="subtitle2"
+                    color="primary"
+                    style={{ marginTop: '2em' }}
+                  >
+                    Event Location Details
+                  </Typography>
+
+                  <Field
+                    name="city"
+                    type="text"
+                    component={TextInput}
+                    label="Event City"
+                  />
+                  <Field
+                    name="venue"
+                    type="text"
+                    component={TextInput}
+                    label="Event Venue"
+                  />
+                  <Field
+                    name="date"
+                    component={DateInput}
+                    label="Event Date"
+                  />
                   <CardActions style={{ justifyContent: 'center' }}>
                     <Button
                       type="submit"
                       variant="contained"
                       color="primary"
+                      disabled={pristine || invalid || submitting}
                     >
                       Submit
                     </Button>
@@ -115,7 +172,7 @@ class EventForm extends Component {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid >
     )
   }
 }
@@ -126,21 +183,14 @@ EventForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.match.params.id;
-
-  let event = {
-    title: '',
-    date: '',
-    city: '',
-    venue: '',
-    hostedBy: ''
-  };
+  let event = {};
 
   if (eventId && state.events.length > 0) {
     event = state.events.filter(event => event.id === eventId)[0];
   }
 
   return {
-    event
+    initialValues: event
   }
 }
 
@@ -152,5 +202,6 @@ const actions = {
 
 export default compose(
   connect(mapStateToProps, actions),
+  reduxForm({ form: 'reduxForm', enableReinitialize: true, validate }),
   withStyles(styles)
 )(EventForm);
