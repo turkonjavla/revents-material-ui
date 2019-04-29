@@ -10,6 +10,11 @@ import ScrollToTop from './app/common/util/ScrollToTop';
 import { Provider } from 'react-redux';
 import { configureStore } from './app/store/configureStore';
 
+/* Date Picker Utils */
+import { MuiPickersUtilsProvider } from 'material-ui-pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
+
 const store = configureStore();
 
 const rootElement = document.getElementById('root');
@@ -18,7 +23,9 @@ let render = () => {
     <Provider store={store}>
       <Router>
         <ScrollToTop>
-          <App />
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <App />
+          </MuiPickersUtilsProvider>
         </ScrollToTop>
       </Router>
     </Provider>,
