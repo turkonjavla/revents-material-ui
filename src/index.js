@@ -12,7 +12,6 @@ import { configureStore } from './app/store/configureStore';
 
 /* Date Picker Utils */
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 
 const store = configureStore();
