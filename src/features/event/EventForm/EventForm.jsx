@@ -1,3 +1,4 @@
+/*global google*/
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -5,8 +6,10 @@ import { compose } from 'redux';
 import { reduxForm, Field } from 'redux-form';
 import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan } from 'revalidate';
 
+import { geocodeBySuggestion } from 'mui-places-autocomplete';
 import moment from 'moment';
 import cuid from 'cuid';
+import Script from 'react-load-script';
 
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -21,6 +24,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextInput from '../../../app/common/form/TextInput';
 import SelectInput from '../../../app/common/form/SelectInput';
 import DateInput from '../../../app/common/form/DateInput';
+import PlaceInput from '../../../app/common/form/PlaceInput';
 
 /* Event Actions */
 import { createEvent, updateEvent, deleteEvent } from '../eventtActions';
@@ -63,8 +67,15 @@ const validate = combineValidators({
 
 class EventForm extends Component {
 
+  state = {
+    cityLatLng: {},
+    venueLatLng: {},
+    scriptLoaded: false
+  }
+
   onFormSubmit = values => {
     values.date = moment(values.date).format();
+    values.venueLatLng = this.state.venueLatLng;
 
     if (this.props.initialValues.id) {
       this.props.updateEvent(values);
@@ -89,10 +100,68 @@ class EventForm extends Component {
     }
   }
 
+  onSuggestionSelectedCity = (suggestion) => {
+    this.props.change('city', suggestion.description);
+
+    geocodeBySuggestion(suggestion)
+      .then((results) => {
+        const { geometry } = results[0]
+
+        const cityLatLng = {
+          lat: geometry.location.lat(),
+          lng: geometry.location.lng(),
+        }
+
+        this.setState({ cityLatLng })
+      })
+  }
+
+  onSuggestionSelectedVenue = (suggestion) => {
+    this.props.change('venue', suggestion.description);
+
+    geocodeBySuggestion(suggestion)
+      .then((results) => {
+        const { geometry } = results[0]
+
+        const venueLatLng = {
+          lat: geometry.location.lat(),
+          lng: geometry.location.lng(),
+        }
+
+        this.setState({ venueLatLng })
+      })
+  }
+
+  createAutocompleteRequestForCities = (inputValue) => {
+    return {
+      input: inputValue,
+      types: ['(cities)']
+    }
+  }
+
+  createAutocompleteRequestForEstablishments = (inputValue) => {
+    return {
+      input: inputValue,
+      types: ['establishment'],
+      location: new google.maps.LatLng(this.state.cityLatLng),
+      radius: 1000
+    }
+  }
+
+  handleScriptLoad = () => {
+    this.setState({
+      scriptLoaded: true
+    })
+  }
+
   render() {
     const { classes, invalid, submitting, pristine } = this.props;
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
+        <Script
+          url={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`}
+          onLoad={this.handleScriptLoad}
+        />
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
           <Grid container spacing={24} justify="center">
             <Grid item xs={12} md={8}>
@@ -142,19 +211,30 @@ class EventForm extends Component {
                   <Field
                     name="city"
                     type="text"
-                    component={TextInput}
                     label="Event City"
+                    fullWidth
+                    onSuggestionSelected={this.onSuggestionSelectedCity}
+                    createAutocompleteRequest={this.createAutocompleteRequestForCities}
+                    component={PlaceInput}
                   />
-                  <Field
-                    name="venue"
-                    type="text"
-                    component={TextInput}
-                    label="Event Venue"
-                  />
+                  {
+                    this.state.scriptLoaded &&
+                    <Field
+                      name="venue"
+                      type="text"
+                      label="Event Venue"
+                      fullWidth
+                      onSuggestionSelected={this.onSuggestionSelectedVenue}
+                      createAutocompleteRequest={this.createAutocompleteRequestForEstablishments}
+                      component={PlaceInput}
+                    />
+                  }
                   <Field
                     name="date"
-                    component={DateInput}
                     label="Event Date"
+                    component={DateInput}
+                    autoComplete="off"
+                    readOnly={true}
                   />
                   <CardActions style={{ justifyContent: 'center' }}>
                     <Button
