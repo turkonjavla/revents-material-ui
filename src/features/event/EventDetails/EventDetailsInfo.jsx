@@ -12,7 +12,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemText from '@material-ui/core/ListItemText';
 import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
-import Typography from '@material-ui/core/Typography';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -21,6 +20,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import EventDetailsMap from './EventDetailsMap';
 
 const styles = theme => ({
   root: {
@@ -39,9 +39,7 @@ const styles = theme => ({
   }
 });
 
-
 class EventDetailsInfo extends Component {
-
   state = { expanded: false };
 
   handleExpandClick = () => {
@@ -91,10 +89,10 @@ class EventDetailsInfo extends Component {
           </ListItem>
           <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography align="left" variant="subtitle1" gutterBottom>
-                Venue Location
-            </Typography>
-              <h2>Google Maps</h2>
+              <EventDetailsMap
+                lat={event.venueLatLng.lat}
+                lng={event.venueLatLng.lng}
+              />
             </CardContent>
           </Collapse>
         </List>
@@ -107,4 +105,4 @@ EventDetailsInfo.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EventDetailsInfo)
+export default withStyles(styles)(EventDetailsInfo);
