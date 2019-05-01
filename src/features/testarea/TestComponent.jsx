@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Script from 'react-load-script';
 import { geocodeBySuggestion } from 'mui-places-autocomplete';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import GoogleMapReact from 'google-map-react';
