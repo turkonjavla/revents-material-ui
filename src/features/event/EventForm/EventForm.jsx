@@ -27,7 +27,7 @@ import DateInput from '../../../app/common/form/DateInput';
 import PlaceInput from '../../../app/common/form/PlaceInput';
 
 /* Event Actions */
-import { createEvent, updateEvent, deleteEvent } from '../eventtActions';
+import { createEvent, updateEvent, deleteEvent } from '../eventActions';
 
 const styles = theme => ({
   paper: {
