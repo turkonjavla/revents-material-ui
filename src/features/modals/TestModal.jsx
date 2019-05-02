@@ -93,6 +93,10 @@ class TestModal extends Component {
   }
 }
 
+TestModal.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
 const actions = {
   closeModal
 }
