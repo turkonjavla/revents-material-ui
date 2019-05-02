@@ -22,6 +22,9 @@ import PersonIcon from '@material-ui/icons/Person';
 import TextInput from '../../../app/common/form/TextInput';
 import { closeModal } from '../../modals/modalActions'
 
+/* Auth Actions */
+import { login } from '../authActions';
+
 const DialogTitle = withStyles(theme => ({
   root: {
     margin: 0,
@@ -65,35 +68,37 @@ const styles = theme => ({
   }
 });
 
-const LoginForm = ({ classes, closeModal }) => {
+const LoginForm = ({ classes, closeModal, login, handleSubmit }) => {
   return (
     <React.Fragment>
       <DialogTitle onClose={closeModal} />
-      <DialogContent>
-        <Field
-          label="Email"
-          name="email"
-          type="email"
-          component={TextInput}
-        />
-        <Field
-          label="Password"
-          name="password"
-          type="password"
-          component={TextInput}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-        >
-          Sign in
-        </Button>
-      </DialogActions>
+      <form onSubmit={handleSubmit(login)}>
+        <DialogContent>
+          <Field
+            label="Email"
+            name="email"
+            type="email"
+            component={TextInput}
+          />
+          <Field
+            label="Password"
+            name="password"
+            type="password"
+            component={TextInput}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign in
+          </Button>
+        </DialogActions>
+      </form>
       <DialogActions>
         <Button
           type="submit"
@@ -123,11 +128,12 @@ LoginForm.propTypes = {
 }
 
 const actions = {
-  closeModal
+  closeModal,
+  login
 }
 
 export default compose(
   connect(null, actions),
-  reduxForm({ form: 'registerForm' }),
+  reduxForm({ form: 'loginForm' }),
   withStyles(styles)
 )(LoginForm)
