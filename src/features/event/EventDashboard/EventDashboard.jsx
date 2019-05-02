@@ -9,9 +9,10 @@ import Typography from '@material-ui/core/Typography';
 
 /* Components */
 import EventList from '../EventList/EventList';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 /* Event Actions */
-import { deleteEvent } from '../eventtActions';
+import { deleteEvent } from '../eventActions';
 
 const styles = theme => ({
   grid: {
@@ -48,7 +49,10 @@ class EventDashboard extends Component {
   }
 
   render() {
-    const { classes, events } = this.props;
+    const { classes, events, loading } = this.props;
+
+    if (loading) return <LoadingComponent />
+    
     return (
       <Fragment>
         <div className={classes.root}>
@@ -84,7 +88,8 @@ class EventDashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  events: state.events
+  events: state.events,
+  loading: state.async.loading
 });
 
 const actions = {
