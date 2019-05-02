@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom';
+import ReduxToastr from 'react-redux-toastr';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 import './index.css';
 import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
@@ -27,6 +29,12 @@ let render = () => {
       <Router>
         <ScrollToTop>
           <MuiPickersUtilsProvider utils={MomentUtils}>
+            <ReduxToastr 
+              position="bottom-right"
+              taransitionIn="fadeIn"
+              taransitionOut="fadeOut"
+              preventDuplicates
+            />
             <App />
           </MuiPickersUtilsProvider>
         </ScrollToTop>
