@@ -14,7 +14,10 @@ import { connect } from 'react-redux';
 /* Test Actions */
 import { incrementCounter, decrementCounter } from './testActions';
 
-const Marker = () => <LocationOnIcon style={{fontSize: '40px', color: '#f44336'}} />
+/* Modals */
+import { openModal, closeModal } from '../modals/modalActions';
+
+const Marker = () => <LocationOnIcon style={{ fontSize: '40px', color: '#f44336' }} />
 
 class TestComponent extends Component {
   static defaultProps = {
@@ -58,14 +61,14 @@ class TestComponent extends Component {
   onChange = address => this.setState({ address })
 
   render() {
-    const { data, incrementCounter, decrementCounter } = this.props;
+    const { data, incrementCounter, decrementCounter, openModal, closeModal } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange
     }
     return (
       <div style={{ padding: '4em' }}>
-{/*         <Script
+        {/*         <Script
           url="https://maps.googleapis.com/maps/api/js?key=AIzaSyDta0x7RCcbBQdsQwvC5KjtXf00xxAKt1s&libraries=places"
           onLoad={this.handleScriptLoad}
         /> */}
@@ -83,7 +86,7 @@ class TestComponent extends Component {
             />
           }
         </div>
-        <div style={{ height: '300px', width: '100%' }}>
+{/*         <div style={{ height: '300px', width: '100%' }}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: 'AIzaSyDta0x7RCcbBQdsQwvC5KjtXf00xxAKt1s' }}
             defaultCenter={this.props.center}
@@ -95,7 +98,8 @@ class TestComponent extends Component {
               text="My Marker"
             />
           </GoogleMapReact>
-        </div>
+        </div> */}
+        <Button onClick={() => openModal('TestModal', { data: 42 })}>Open modal</Button>
       </div>
     )
   }
@@ -107,7 +111,9 @@ const mapStateToProps = state => ({
 
 const actions = {
   incrementCounter,
-  decrementCounter
+  decrementCounter,
+  openModal,
+  closeModal
 }
 
 export default compose(
