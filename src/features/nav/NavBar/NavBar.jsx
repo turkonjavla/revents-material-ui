@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { openModal } from '../../modals/modalActions';
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -47,9 +49,11 @@ class NavBar extends Component {
   }
 
   handleSignIn = () => {
-    this.setState({
-      auth: true
-    })
+    this.props.openModal('LoginModal');
+  }
+
+  handleRegister = () => {
+    this.props.openModal('RegisterModal');
   }
 
   handleSignOut = () => {
@@ -91,7 +95,7 @@ class NavBar extends Component {
               auth ?
                 <SignedInMenu signOut={this.handleSignOut}
                 /> :
-                <SignedOutMenu signIn={this.handleSignIn} />
+                <SignedOutMenu register={this.handleRegister} signIn={this.handleSignIn} />
             }
           </Toolbar>
         </AppBar>
@@ -140,7 +144,12 @@ NavBar.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
+const actions = {
+  openModal
+}
+
 export default compose(
+  connect(null, actions),
   withStyles(styles),
   withRouter
 )(NavBar);

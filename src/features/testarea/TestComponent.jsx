@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { geocodeBySuggestion } from 'mui-places-autocomplete';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import GoogleMapReact from 'google-map-react';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 /* MUI Components */
 import Button from '@material-ui/core/Button';
@@ -15,9 +13,7 @@ import { connect } from 'react-redux';
 import { incrementCounter, decrementCounter } from './testActions';
 
 /* Modals */
-import { openModal, closeModal } from '../modals/modalActions';
-
-const Marker = () => <LocationOnIcon style={{ fontSize: '40px', color: '#f44336' }} />
+import { openModal } from '../modals/modalActions';
 
 class TestComponent extends Component {
   static defaultProps = {
@@ -61,7 +57,7 @@ class TestComponent extends Component {
   onChange = address => this.setState({ address })
 
   render() {
-    const { data, incrementCounter, decrementCounter, openModal, closeModal } = this.props;
+    const { data, incrementCounter, decrementCounter, openModal } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange
@@ -112,8 +108,7 @@ const mapStateToProps = state => ({
 const actions = {
   incrementCounter,
   decrementCounter,
-  openModal,
-  closeModal
+  openModal
 }
 
 export default compose(
