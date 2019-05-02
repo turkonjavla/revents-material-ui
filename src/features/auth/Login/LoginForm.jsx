@@ -70,12 +70,6 @@ const LoginForm = ({ classes, closeModal }) => {
     <React.Fragment>
       <DialogTitle onClose={closeModal} />
       <DialogContent>
-{/*         <Field
-          label="Email"
-          name="email"
-          type="email"
-          component={TextInput}
-        /> */}
         <Field
           label="Email"
           name="email"
