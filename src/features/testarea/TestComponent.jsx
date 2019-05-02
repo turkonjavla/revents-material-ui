@@ -1,19 +1,54 @@
 import React, { Component } from 'react';
 import { geocodeBySuggestion } from 'mui-places-autocomplete';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 /* MUI Components */
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import green from '@material-ui/core/colors/green';
 
 /* Redux */
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 /* Test Actions */
-import { incrementCounter, decrementCounter } from './testActions';
+import { incrementCounter, decrementCounter, incrementAsync, decrementAsync } from './testActions';
 
 /* Modals */
 import { openModal } from '../modals/modalActions';
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
+  buttonSuccess: {
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+  fabProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: -6,
+    left: -6,
+    zIndex: 1,
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+});
 
 class TestComponent extends Component {
   static defaultProps = {
@@ -57,7 +92,7 @@ class TestComponent extends Component {
   onChange = address => this.setState({ address })
 
   render() {
-    const { data, incrementCounter, decrementCounter, openModal } = this.props;
+    const { data, incrementCounter, decrementCounter, openModal, incrementAsync, decrementAsync, loading, classes } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange
@@ -70,8 +105,10 @@ class TestComponent extends Component {
         /> */}
         <h1>Test Area</h1>
         <h2>{data}</h2>
-        <Button onClick={incrementCounter} variant="outlined" color="primary">Increment</Button>
-        <Button onClick={decrementCounter} variant="outlined" color="secondary">Decrement</Button>
+        <Button disabled={loading} onClick={incrementAsync} variant="outlined" color="primary">Increment</Button>
+        <Button disabled={loading} onClick={decrementAsync} variant="outlined" color="secondary">Decrement</Button>
+
+
         <br />
         <br />
         <div>
@@ -82,7 +119,7 @@ class TestComponent extends Component {
             />
           }
         </div>
-{/*         <div style={{ height: '300px', width: '100%' }}>
+        {/*         <div style={{ height: '300px', width: '100%' }}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: 'AIzaSyDta0x7RCcbBQdsQwvC5KjtXf00xxAKt1s' }}
             defaultCenter={this.props.center}
@@ -96,21 +133,26 @@ class TestComponent extends Component {
           </GoogleMapReact>
         </div> */}
         <Button onClick={() => openModal('TestModal', { data: 42 })}>Open modal</Button>
+        {loading && <CircularProgress size={48} className={classes.buttonProgress} />}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  data: state.test.data
+  data: state.test.data,
+  loading: state.test.loading
 })
 
 const actions = {
   incrementCounter,
   decrementCounter,
+  incrementAsync,
+  decrementAsync,
   openModal
 }
 
 export default compose(
-  connect(mapStateToProps, actions)
+  connect(mapStateToProps, actions),
+  withStyles(styles)
 )(TestComponent);
