@@ -32,7 +32,7 @@ class SignedInLinks extends Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { signOut, location: { pathname } } = this.props;
+    const { signOut, location: { pathname }, currentUser } = this.props;
     const open = Boolean(anchorEl);
 
     return (
@@ -63,7 +63,7 @@ class SignedInLinks extends Component {
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
-            <ListItemText inset primary="Create Event" />
+            <ListItemText inset primary={"Create Event"} />
           </MenuItem>
 
           <MenuItem onClick={this.handleClose}>

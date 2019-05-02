@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
+
+/* Redux */
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { openModal } from '../../modals/modalActions';
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -24,6 +25,12 @@ import Drawer from '@material-ui/core/Drawer';
 import SignedOutMenu from '../Menu/SignedOutMenu';
 import SignedInMenu from '../Menu/SignedInMenu';
 
+/* Modal Actions */
+import { openModal } from '../../modals/modalActions';
+
+/* Auth Action */
+import { logout } from '../../auth/authActions';
+
 const styles = {
   root: {
     flexGrow: 1,
@@ -43,7 +50,6 @@ const styles = {
 
 class NavBar extends Component {
   state = {
-    auth: false,
     left: false,
     selectedIndex: 1
   }
@@ -57,10 +63,8 @@ class NavBar extends Component {
   }
 
   handleSignOut = () => {
-    this.setState({
-      auth: false
-    });
-    this.props.history.push('/')
+    this.props.logout();
+    this.props.history.push('/events')
   }
 
   handleDrawerToggle = (side, open) => () => {
@@ -74,8 +78,8 @@ class NavBar extends Component {
   }
 
   render() {
-    const { classes, location: { pathname } } = this.props;
-    const { auth } = this.state;
+    const { classes, location: { pathname }, auth } = this.props;
+    const authenticated = auth.authenticated;
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -92,8 +96,8 @@ class NavBar extends Component {
               Revents
             </Typography>
             {
-              auth ?
-                <SignedInMenu signOut={this.handleSignOut}
+              authenticated ?
+                <SignedInMenu currentUser={auth.currentUser} signOut={this.handleSignOut}
                 /> :
                 <SignedOutMenu register={this.handleRegister} signIn={this.handleSignIn} />
             }
@@ -114,7 +118,7 @@ class NavBar extends Component {
               <ListItemText primary="Home" />
             </ListItem>
             {
-              auth &&
+              authenticated &&
               <ListItem button component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
                 <ListItemIcon>
                   <AddIcon />
@@ -144,12 +148,17 @@ NavBar.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
 const actions = {
-  openModal
+  openModal,
+  logout
 }
 
 export default compose(
-  connect(null, actions),
+  connect(mapStateToProps, actions),
   withStyles(styles),
   withRouter
 )(NavBar);
