@@ -31,7 +31,6 @@ let render = () => {
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <ReduxToastr
               timeOut={2000}
-              progressBar
               position="bottom-right"
               transitionIn="fadeIn"
               transitionOut="fadeOut"
