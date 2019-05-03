@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 /* Test Actions */
-import { incrementCounter, decrementCounter, incrementAsync, decrementAsync } from './testActions';
+import { incrementAsync, decrementAsync } from './testActions';
 
 /* Modals */
 import { openModal } from '../modals/modalActions';
@@ -92,7 +92,7 @@ class TestComponent extends Component {
   onChange = address => this.setState({ address })
 
   render() {
-    const { data, incrementCounter, decrementCounter, openModal, incrementAsync, decrementAsync, loading, classes } = this.props;
+    const { data, openModal, incrementAsync, decrementAsync, loading, classes } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange
@@ -145,8 +145,6 @@ const mapStateToProps = state => ({
 })
 
 const actions = {
-  incrementCounter,
-  decrementCounter,
   incrementAsync,
   decrementAsync,
   openModal
