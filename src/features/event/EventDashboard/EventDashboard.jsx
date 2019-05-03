@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 /* Components */
 import EventList from '../EventList/EventList';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import EventActivity from '../EventActivity/EventActivity';
 
 /* Event Actions */
 import { deleteEvent } from '../eventActions';
@@ -76,7 +77,7 @@ class EventDashboard extends Component {
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <h2>Sidebar</h2>
+                  <EventActivity />
                 </Grid>
               </Grid>
             </Grid>

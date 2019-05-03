@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 /* MUI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -40,10 +41,18 @@ const styles = theme => ({
 });
 
 class EventDetailsInfo extends Component {
-  state = { expanded: false };
+  state = {
+    expanded: false
+  };
+
+  componentWillUnmount() {
+    this.setState({
+      expanded: false
+    })
+  }
 
   handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+    this.setState(prevState => ({ expanded: !prevState.expanded }));
   };
 
   render() {
@@ -67,7 +76,10 @@ class EventDetailsInfo extends Component {
             <ListItemIcon>
               <CalendarTodayIcon />
             </ListItemIcon>
-            <ListItemText primary={event.date} />
+            <ListItemText primary={
+              `${moment(event.date).format('dddd Do MMMM')} at ${moment(event.date).format('hh:mm A')}`
+            }
+            />
           </ListItem>
           <ListItem>
             <ListItemIcon>

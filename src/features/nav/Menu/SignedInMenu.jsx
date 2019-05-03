@@ -32,7 +32,7 @@ class SignedInLinks extends Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { signOut, location: { pathname }, currentUser } = this.props;
+    const { signOut, location: { pathname } } = this.props;
     const open = Boolean(anchorEl);
 
     return (

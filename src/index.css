@@ -19,3 +19,35 @@ height: 100%;
   transform: translateY(150px);
   font-family: 'Roboto', sans-serif;
 }
+
+.redux-toastr .toastr.rrt-info {
+	background-color:#2196f3
+}
+
+.redux-toastr .toastr.rrt-info .rrt-progressbar {
+	background-color:#1976d2
+}
+
+.redux-toastr .toastr.rrt-success {
+	background-color:#4caf50
+}
+
+.redux-toastr .toastr.rrt-success .rrt-progressbar {
+	background-color:#3e914d
+}
+
+.redux-toastr .toastr.rrt-warning {
+	background-color:#ff9800
+}
+
+.redux-toastr .toastr.rrt-warning .rrt-progressbar {
+	background-color:#d87e09
+}
+
+.redux-toastr .toastr.rrt-error {
+	background-color:#f44336
+}
+
+.redux-toastr .toastr.rrt-error .rrt-progressbar {
+	background-color:#c5352e
+}
