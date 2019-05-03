@@ -49,7 +49,9 @@ class EventListItem extends Component {
   render() {
     const { classes, deleteEvent } = this.props;
     const { id, title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
-    const attendeeList = attendees && attendees.map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
+    const attendeeList =
+      attendees &&
+      Object.values(attendees).map((attendee, index) => <EventListAttendee key={index} attendee={attendee} />)
     return (
       <Card style={{ marginBottom: '2em' }}>
         <CardHeader
