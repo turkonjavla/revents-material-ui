@@ -158,7 +158,7 @@ const actions = {
 }
 
 export default compose(
+  withRouter,
   connect(mapStateToProps, actions),
-  withStyles(styles),
-  withRouter
+  withStyles(styles)
 )(NavBar);
