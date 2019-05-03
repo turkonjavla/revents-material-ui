@@ -29,10 +29,12 @@ let render = () => {
       <Router>
         <ScrollToTop>
           <MuiPickersUtilsProvider utils={MomentUtils}>
-            <ReduxToastr 
+            <ReduxToastr
+              timeOut={2000}
+              progressBar
               position="bottom-right"
-              taransitionIn="fadeIn"
-              taransitionOut="fadeOut"
+              transitionIn="fadeIn"
+              transitionOut="fadeOut"
               preventDuplicates
             />
             <App />
