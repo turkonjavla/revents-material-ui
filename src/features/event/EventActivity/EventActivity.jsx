@@ -55,11 +55,11 @@ const EventActivity = ({ classes }) => {
                 />
               </ListItem>
             ) : (
-            <ListItem alignItems="flex-start">
-              <ListItemText
-                primary="No Recent activity"
-              />
-            </ListItem>
+              <ListItem alignItems="flex-start">
+                <ListItemText
+                  primary="No Recent activity"
+                />
+              </ListItem>
             )
         }
       </List>
