@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
+import moment from 'moment';
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -62,7 +63,7 @@ class EventListItem extends Component {
             </Avatar>
           }
           title={title}
-          subheader={date}
+          subheader={`${moment(date).format('dddd Do MMMM')} at ${moment(date).format('hh:mm A')}`}
         />
         <CardContent>
           <Typography align="left" component="p">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 /* MUI Components */
 import Card from '@material-ui/core/Card';
@@ -22,7 +23,7 @@ const EventDetailsHeader = ({ event }) => {
           {event.title}
         </Typography>
         <Typography variant="body2">
-          {event.date}
+          {moment(event.date).format('dddd Do MMMM')}
         </Typography>
         <Typography variant="body2">
           Hosted by <strong>{event.hostedBy}</strong>
