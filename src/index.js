@@ -16,13 +16,9 @@ import { configureStore } from './app/store/configureStore';
 import { MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
 
-/* Event Actions */
-import { loadEvents } from './features/event/eventActions';
-
 const store = configureStore();
-store.dispatch(loadEvents())
-
 const rootElement = document.getElementById('root');
+
 let render = () => {
   ReactDOM.render(
     <Provider store={store}>
