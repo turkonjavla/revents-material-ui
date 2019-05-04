@@ -24,9 +24,6 @@ import GridList from '@material-ui/core/GridList';
 import EventListAttendee from './EventListAttendee';
 
 const styles = theme => ({
-  card: {
-    marginBottom: 30,
-  },
   expand: {
     transform: 'rotate(0deg)',
     marginLeft: 'auto',
@@ -53,7 +50,7 @@ class EventListItem extends Component {
       attendees &&
       Object.values(attendees).map((attendee, index) => <EventListAttendee key={index} attendee={attendee} />)
     return (
-      <Card style={{ marginBottom: '2em' }}>
+      <Card>
         <CardHeader
           align="left"
           avatar={
