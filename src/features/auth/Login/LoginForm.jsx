@@ -15,15 +15,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
+
+/* MUI Icons */
 import CloseIcon from '@material-ui/icons/Close';
 import PersonIcon from '@material-ui/icons/Person';
 
 /* Components */
 import TextInput from '../../../app/common/form/TextInput';
-import { closeModal } from '../../modals/modalActions'
+import SocialLogin from '../SocialLogin/SocialLogin';
 
-/* Auth Actions */
+/* Actions */
 import { login } from '../authActions';
+import { closeModal } from '../../modals/modalActions'
 
 import {
   combineValidators,
@@ -111,25 +114,8 @@ const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, s
             Sign in
           </Button>
         </DialogActions>
+        <SocialLogin />
       </form>
-      <DialogActions style={{ marginBottom: '1em' }}>
-        <Button
-          type="submit"
-          fullWidth
-          variant="outlined"
-          color="primary"
-        >
-          Facebook
-        </Button>
-        <Button
-          type="submit"
-          fullWidth
-          variant="outlined"
-          color="secondary"
-        >
-          Google
-        </Button>
-      </DialogActions>
     </React.Fragment>
   )
 }

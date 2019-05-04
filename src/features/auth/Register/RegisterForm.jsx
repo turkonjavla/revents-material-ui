@@ -32,10 +32,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 /* Components */
 import TextInput from '../../../app/common/form/TextInput';
-import { closeModal } from '../../modals/modalActions'
+import SocialLogin from '../SocialLogin/SocialLogin';
 
-/* Auth Actions */
+/* Actions */
 import { registerUser } from '../authActions';
+import { closeModal } from '../../modals/modalActions'
 
 const isValidEmail = createValidator(
   message => value => {
@@ -182,6 +183,7 @@ const RegisterForm = ({ classes, closeModal, handleSubmit, registerUser, error, 
             Register
         </Button>
         </DialogActions>
+        <SocialLogin />
       </form>
     </div>
   )
