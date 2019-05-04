@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 /* Redux */
 import { compose } from 'redux';
@@ -13,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -24,6 +24,17 @@ import { closeModal } from '../../modals/modalActions'
 
 /* Auth Actions */
 import { login } from '../authActions';
+
+import {
+  combineValidators,
+  isRequired,
+} from 'revalidate';
+
+/* Validation */
+const validate = combineValidators({
+  email: isRequired('Email'),
+  password: isRequired('Password')
+})
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -62,13 +73,7 @@ const DialogTitle = withStyles(theme => ({
   );
 });
 
-const styles = theme => ({
-  submit: {
-    marginTop: theme.spacing.unit * 2
-  }
-});
-
-const LoginForm = ({ classes, closeModal, login, handleSubmit }) => {
+const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, submitting }) => {
   return (
     <React.Fragment>
       <DialogTitle onClose={closeModal} />
@@ -87,25 +92,32 @@ const LoginForm = ({ classes, closeModal, login, handleSubmit }) => {
             component={TextInput}
           />
         </DialogContent>
+        {
+          error &&
+          <DialogContent>
+            <DialogContentText style={{ color: '#f44336' }}>
+              {error}
+            </DialogContentText>
+          </DialogContent>
+        }
         <DialogActions>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            disabled={invalid || submitting}
           >
             Sign in
           </Button>
         </DialogActions>
       </form>
-      <DialogActions>
+      <DialogActions style={{ marginBottom: '1em' }}>
         <Button
           type="submit"
           fullWidth
           variant="outlined"
           color="primary"
-          className={classes.submit}
         >
           Facebook
         </Button>
@@ -113,18 +125,13 @@ const LoginForm = ({ classes, closeModal, login, handleSubmit }) => {
           type="submit"
           fullWidth
           variant="outlined"
-          color="primary"
-          className={classes.submit}
+          color="secondary"
         >
           Google
         </Button>
       </DialogActions>
     </React.Fragment>
   )
-}
-
-LoginForm.propTypes = {
-  classes: PropTypes.object.isRequired
 }
 
 const actions = {
@@ -134,6 +141,5 @@ const actions = {
 
 export default compose(
   connect(null, actions),
-  reduxForm({ form: 'loginForm' }),
-  withStyles(styles)
+  reduxForm({ form: 'loginForm', validate })
 )(LoginForm)

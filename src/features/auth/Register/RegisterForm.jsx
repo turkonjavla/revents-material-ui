@@ -1,5 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  combineValidators,
+  composeValidators,
+  isRequired,
+  createValidator,
+  hasLengthBetween,
+  matchesField,
+  hasLengthLessThan
+} from 'revalidate';
 
 /* Redux */
 import { compose } from 'redux';
@@ -13,14 +22,69 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
+
+/* MUI Icons */
 import CloseIcon from '@material-ui/icons/Close';
-import PersonIcon from '@material-ui/icons/Person';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 /* Components */
 import TextInput from '../../../app/common/form/TextInput';
 import { closeModal } from '../../modals/modalActions'
+
+/* Auth Actions */
+import { registerUser } from '../authActions';
+
+const isValidEmail = createValidator(
+  message => value => {
+    if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      return message
+    }
+  },
+  'Invalid email address'
+)
+
+const noWhitespace = createValidator(
+  message => value => {
+    if (value && !/^[\x21-\x7E]+$/i.test(value)) {
+      return message
+    }
+  },
+  'No whitespaces allowed'
+)
+
+const specialCharacters = createValidator(
+  message => value => {
+    if (value && !/^[a-zA-Z0-9#$&.+,"]*$/i.test(value)) {
+      return message
+    }
+  },
+  'Only | # | $ | & | . | + | , | allowed'
+)
+
+/* Validation */
+const validate = combineValidators({
+  displayName: composeValidators(
+    isRequired({ message: 'Please enter your full name' }),
+    hasLengthLessThan(300)({ message: 'You name can\'t be more than 300 characters' })
+  )(),
+  email: composeValidators(
+    isRequired('Email'),
+    isValidEmail
+  )(),
+  password: composeValidators(
+    isRequired('Password'),
+    hasLengthBetween(6, 30)({ message: 'Password must be between 6 and 30 characters' }),
+    noWhitespace,
+    specialCharacters
+  )(),
+  confirmPassword: composeValidators(
+    isRequired({ message: 'Please confirm your password' }),
+    matchesField('password')({ message: 'Passwords don\'t match' })
+  )()
+})
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -46,7 +110,7 @@ const DialogTitle = withStyles(theme => ({
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
       <Avatar className={classes.avatar}>
-        <PersonIcon />
+        <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
         Register
@@ -60,48 +124,66 @@ const DialogTitle = withStyles(theme => ({
 
 const styles = theme => ({
   submit: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 1
   }
 });
 
-const RegisterForm = ({ classes, closeModal }) => {
+const RegisterForm = ({ classes, closeModal, handleSubmit, registerUser, error, invalid, submitting }) => {
   return (
-    <React.Fragment>
+    <div style={{ maxWidth: '400px' }}>
       <DialogTitle onClose={closeModal} />
-      <DialogContent>
-        <Field
-          autoComplete="off"
-          label="Know As"
-          name="displayName"
-          type="text"
-          component={TextInput}
-        />
-        <Field
-          autoComplete="off"
-          label="Email"
-          name="email"
-          type="email"
-          component={TextInput}
-        />
-        <Field
-          label="Password"
-          name="password"
-          type="password"
-          component={TextInput}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-        >
-          Register
+      <form onSubmit={handleSubmit(registerUser)}>
+        <DialogContent>
+          <Field
+            autoComplete="off"
+            label="Full Name"
+            name="displayName"
+            type="text"
+            component={TextInput}
+          />
+          <Field
+            autoComplete="off"
+            label="Email"
+            name="email"
+            type="email"
+            component={TextInput}
+          />
+          <Field
+            label="Password"
+            name="password"
+            type="password"
+            component={TextInput}
+          />
+          <Field
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            component={TextInput}
+          />
+        </DialogContent>
+        {
+          error &&
+          <DialogContent>
+            <DialogContentText style={{ color: '#f44336' }}>
+              {error}
+            </DialogContentText>
+          </DialogContent>
+        }
+        <DialogActions>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={invalid || submitting}
+            className={classes.submit}
+          >
+            Register
         </Button>
-      </DialogActions>
-    </React.Fragment>
+        </DialogActions>
+      </form>
+    </div>
   )
 }
 
@@ -110,11 +192,12 @@ RegisterForm.propTypes = {
 }
 
 const actions = {
-  closeModal
+  closeModal,
+  registerUser
 }
 
 export default compose(
   connect(null, actions),
-  reduxForm({ form: 'registerForm' }),
+  reduxForm({ form: 'registerForm', validate }),
   withStyles(styles)
 )(RegisterForm)
