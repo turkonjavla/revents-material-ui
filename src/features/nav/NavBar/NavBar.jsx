@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 /* Redux */
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withFirebase } from 'react-redux-firebase'
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -27,9 +28,6 @@ import SignedInMenu from '../Menu/SignedInMenu';
 
 /* Modal Actions */
 import { openModal } from '../../modals/modalActions';
-
-/* Auth Action */
-import { logout } from '../../auth/authActions';
 
 const styles = {
   root: {
@@ -63,7 +61,7 @@ class NavBar extends Component {
   }
 
   handleSignOut = () => {
-    this.props.logout();
+    this.props.firebase.logout();
     this.props.history.push('/events')
   }
 
@@ -79,7 +77,7 @@ class NavBar extends Component {
 
   render() {
     const { classes, location: { pathname }, auth } = this.props;
-    const authenticated = auth.authenticated;
+    const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -97,7 +95,7 @@ class NavBar extends Component {
             </Typography>
             {
               authenticated ?
-                <SignedInMenu currentUser={auth.currentUser} signOut={this.handleSignOut}
+                <SignedInMenu auth={auth} signOut={this.handleSignOut}
                 /> :
                 <SignedOutMenu register={this.handleRegister} signIn={this.handleSignIn} />
             }
@@ -149,16 +147,16 @@ NavBar.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.firebase.auth
 })
 
 const actions = {
-  openModal,
-  logout
+  openModal
 }
 
 export default compose(
   withRouter,
+  withFirebase,
   connect(mapStateToProps, actions),
   withStyles(styles)
 )(NavBar);
