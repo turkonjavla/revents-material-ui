@@ -3,11 +3,11 @@ import { Link, withRouter } from 'react-router-dom';
 
 /* Material UI Components */
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
 
 /* MUI Icons */
 import AddIcon from '@material-ui/icons/Add';
@@ -43,7 +43,7 @@ class SignedInLinks extends Component {
           onClick={this.handleMenu}
           color="inherit"
         >
-          <AccountCircle />
+          <Avatar alt="Remy Sharp" src="https://randomuser.me/api/portraits/men/22.jpg" style={{ width: '30px', height: '30px' }}/*  className={classes.avatar}  */ />
         </IconButton>
         <Menu
           id="menu-appbar"
