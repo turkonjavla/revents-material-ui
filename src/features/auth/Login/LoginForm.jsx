@@ -18,7 +18,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 /* MUI Icons */
 import CloseIcon from '@material-ui/icons/Close';
-import LockIcon from '@material-ui/icons/Lock';
 
 /* Font Awesome */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
