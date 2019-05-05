@@ -54,5 +54,5 @@ if (module.hot) {
 
 library.add(fab, faSignInAlt, faLock, faUserAlt);
 
-render();
+store.firebaseAuthIsReady.then(() => render())
 serviceWorker.unregister();
