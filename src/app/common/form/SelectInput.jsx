@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 const SelectInput = ({ input, label, meta: { touched, error }, children, ...custom }) => {
   return (
     <FormControl margin="normal" fullWidth>
-      <InputLabel error={touched && !!error} htmlFor="name-disabled">Category</InputLabel>
+      <InputLabel error={touched && !!error}>{label}</InputLabel>
       <Select
         value={input.value || null}
         onChange={(e, data) => input.onChange(data.value)}
@@ -21,7 +21,7 @@ const SelectInput = ({ input, label, meta: { touched, error }, children, ...cust
       {
         touched &&
         error &&
-        <FormHelperText style={{color: '#f44336'}}>{error}</FormHelperText>
+        <FormHelperText style={{ color: '#f44336' }}>{error}</FormHelperText>
       }
     </FormControl>
   )
