@@ -28,7 +28,9 @@ import IconButton from '@material-ui/core/IconButton';
 
 /* MUI Icons */
 import CloseIcon from '@material-ui/icons/Close';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+/* Font Awesome */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /* Components */
 import TextInput from '../../../app/common/form/TextInput';
@@ -111,7 +113,7 @@ const DialogTitle = withStyles(theme => ({
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
       <Avatar className={classes.avatar}>
-        <LockOutlinedIcon />
+        <FontAwesomeIcon icon="user-alt" />
       </Avatar>
       <Typography component="h1" variant="h5">
         Register

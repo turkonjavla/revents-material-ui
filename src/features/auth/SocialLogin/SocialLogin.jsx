@@ -4,6 +4,10 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 
+/* Font Awesome */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
+
 const SocialLogin = ({ socialLogin }) => {
   return (
     <React.Fragment>
@@ -15,7 +19,7 @@ const SocialLogin = ({ socialLogin }) => {
           color="primary"
           onClick={() => socialLogin('facebook')}
         >
-          Login with Facebook
+          <FontAwesomeIcon style={{ marginRight: '0.5em' }} icon={faFacebook} /> Login with Facebook
         </Button>
       </DialogActions>
       <DialogActions>
@@ -26,7 +30,7 @@ const SocialLogin = ({ socialLogin }) => {
           color="secondary"
           onClick={() => socialLogin('google')}
         >
-          Login with Google
+         <FontAwesomeIcon style={{ marginRight: '0.5em' }} icon={faGoogle} /> Login with Google
       </Button>
       </DialogActions>
     </React.Fragment>

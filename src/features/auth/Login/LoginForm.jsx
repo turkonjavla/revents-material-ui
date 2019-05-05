@@ -18,7 +18,10 @@ import IconButton from '@material-ui/core/IconButton';
 
 /* MUI Icons */
 import CloseIcon from '@material-ui/icons/Close';
-import PersonIcon from '@material-ui/icons/Person';
+import LockIcon from '@material-ui/icons/Lock';
+
+/* Font Awesome */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /* Components */
 import TextInput from '../../../app/common/form/TextInput';
@@ -64,7 +67,7 @@ const DialogTitle = withStyles(theme => ({
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
       <Avatar className={classes.avatar}>
-        <PersonIcon />
+        <FontAwesomeIcon icon="lock"/>
       </Avatar>
       <Typography component="h1" variant="h5">
         Sign In
@@ -111,7 +114,7 @@ const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, s
             color="primary"
             disabled={invalid || submitting}
           >
-            Sign in
+            <FontAwesomeIcon icon="sign-in-alt" style={{ marginRight: '0.5em' }} /> Sign in
           </Button>
         </DialogActions>
         <SocialLogin socialLogin={socialLogin} />
