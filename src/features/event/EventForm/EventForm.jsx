@@ -23,7 +23,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 /* Form Inputs */
 import TextInput from '../../../app/common/form/TextInput';
 import SelectInput from '../../../app/common/form/SelectInput';
-import DateInput from '../../../app/common/form/DateInput';
+import DateTimeInput from '../../../app/common/form/DateTimeInput';
 import PlaceInput from '../../../app/common/form/PlaceInput';
 
 /* Event Actions */
@@ -232,7 +232,7 @@ class EventForm extends Component {
                   <Field
                     name="date"
                     label="Event Date"
-                    component={DateInput}
+                    component={DateTimeInput}
                     autoComplete="off"
                     readOnly={true}
                   />
