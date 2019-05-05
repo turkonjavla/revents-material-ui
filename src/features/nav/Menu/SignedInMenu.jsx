@@ -32,7 +32,7 @@ class SignedInLinks extends Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { signOut, location: { pathname } } = this.props;
+    const { signOut, location: { pathname }, profile } = this.props;
     const open = Boolean(anchorEl);
 
     return (
@@ -43,7 +43,7 @@ class SignedInLinks extends Component {
           onClick={this.handleMenu}
           color="inherit"
         >
-          <Avatar alt="Remy Sharp" src="https://randomuser.me/api/portraits/men/22.jpg" style={{ width: '30px', height: '30px' }}/*  className={classes.avatar}  */ />
+          <Avatar alt="Remy Sharp" src={profile.photoURL || '/assets/user.png'} style={{ width: '30px', height: '30px' }}/*  className={classes.avatar}  */ />
         </IconButton>
         <Menu
           id="menu-appbar"
