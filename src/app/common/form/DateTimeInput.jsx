@@ -1,22 +1,42 @@
 import React from 'react';
-import { DatePicker } from 'material-ui-pickers';
+import { DateTimePicker } from 'material-ui-pickers';
 import moment from 'moment';
 
 /* MUI Components */
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 
-const DateOnlyInput = ({
+const DateInput = ({
   input: { onChange, value, ...restInput }, meta: { touched, error },
   ...rest
 }) => {
   return (
-    <FormControl fullWidth>
-      <DatePicker
+    <FormControl margin="normal" fullWidth>
+      <DateTimePicker
+        clearable
+        keyboard
         error={touched && !!error}
         onChange={onChange}
-        format="YYYY-MM-DD"
+        format="YYYY-MM-DD HH:mm"
         value={value ? moment(value) : null}
+        mask={[
+          /\d/,
+          /\d/,
+          /\d/,
+          /\d/,
+          "-",
+          /\d/,
+          /\d/,
+          "-",
+          /\d/,
+          /\d/,
+          " ",
+          /\d/,
+          /\d/,
+          ":",
+          /\d/,
+          /\d/
+        ]}
         {...rest}
         {...restInput}
       />
@@ -29,4 +49,4 @@ const DateOnlyInput = ({
   )
 }
 
-export default DateOnlyInput;
+export default DateInput;

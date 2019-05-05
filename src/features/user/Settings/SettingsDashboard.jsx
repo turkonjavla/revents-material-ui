@@ -6,7 +6,6 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 
 /* Components */
 import BasicPage from './BasicPage';
@@ -16,6 +15,7 @@ import AccountPage from './AccountPage';
 
 /* Actions */
 import { updatePassword } from '../../auth/authActions';
+import { updateProfile } from '../userActions'
 
 const styles = theme => ({
   grid: {
@@ -35,7 +35,7 @@ const styles = theme => ({
   }
 });
 
-const SettingsDashboard = ({ classes, updatePassword, providerId }) => {
+const SettingsDashboard = ({ classes, updatePassword, providerId, user, updateProfile }) => {
   return (
     <div style={{ marginTop: '2em' }}>
       <Grid container justify="center">
@@ -44,7 +44,15 @@ const SettingsDashboard = ({ classes, updatePassword, providerId }) => {
             <Grid item xs={12} sm={10} md={8}>
               <Switch>
                 <Redirect exact from="/settings" to="/settings/basic" />
-                <Route path="/settings/basic" component={BasicPage} />
+                <Route
+                  path="/settings/basic"
+                  render={() =>
+                    < BasicPage
+                      updateProfile={updateProfile}
+                      initialValues={user}
+                    />
+                  }
+                />
                 <Route path="/settings/about" component={AboutPage} />
                 <Route path="/settings/photos" component={PhotosPage} />
                 <Route
@@ -66,11 +74,13 @@ const SettingsDashboard = ({ classes, updatePassword, providerId }) => {
 }
 
 const mapStateToProps = state => ({
-  providerId: state.firebase.auth.providerData[0].providerId
+  providerId: state.firebase.auth.providerData[0].providerId,
+  user: state.firebase.profile
 });
 
 const actions = {
-  updatePassword
+  updatePassword,
+  updateProfile
 }
 
 export default compose(

@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { combineValidators, composeValidators, createValidator, isRequired, hasLengthBetween, matchesField } from 'revalidate';
 
 /* MUI Components */
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -51,7 +51,7 @@ const validate = combineValidators({
 
 const AccountPage = ({ error, submitting, invalid, handleSubmit, updatePassword, providerId }) => {
   return (
-    <Card>
+    <Paper>
       <CardHeader
         action={
           <SettingsNav />
@@ -129,7 +129,7 @@ const AccountPage = ({ error, submitting, invalid, handleSubmit, updatePassword,
           </CardActions>
         </React.Fragment>
       }
-    </Card>
+    </Paper>
   )
 }
 

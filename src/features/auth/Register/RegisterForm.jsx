@@ -37,7 +37,7 @@ import TextInput from '../../../app/common/form/TextInput';
 import SocialLogin from '../SocialLogin/SocialLogin';
 
 /* Actions */
-import { registerUser } from '../authActions';
+import { registerUser, socialLogin } from '../authActions';
 import { closeModal } from '../../modals/modalActions'
 
 const isValidEmail = createValidator(
@@ -131,7 +131,7 @@ const styles = theme => ({
   }
 });
 
-const RegisterForm = ({ classes, closeModal, handleSubmit, registerUser, error, invalid, submitting }) => {
+const RegisterForm = ({ classes, closeModal, handleSubmit, registerUser, error, invalid, submitting, socialLogin }) => {
   return (
     <div style={{ maxWidth: '412px' }}>
       <DialogTitle onClose={closeModal} />
@@ -184,7 +184,7 @@ const RegisterForm = ({ classes, closeModal, handleSubmit, registerUser, error, 
             Register
         </Button>
         </DialogActions>
-        <SocialLogin />
+        <SocialLogin socialLogin={socialLogin} />
       </form>
     </div>
   )
@@ -196,7 +196,8 @@ RegisterForm.propTypes = {
 
 const actions = {
   closeModal,
-  registerUser
+  registerUser,
+  socialLogin
 }
 
 export default compose(
