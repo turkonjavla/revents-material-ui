@@ -4,25 +4,27 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 
-const SocialLogin = () => {
+const SocialLogin = ({ socialLogin }) => {
   return (
     <React.Fragment>
       <DialogActions style={{ marginTop: '1em' }}>
         <Button
-          type="submit"
+          type="button"
           fullWidth
           variant="outlined"
           color="primary"
+          onClick={() => socialLogin('facebook')}
         >
           Login with Facebook
         </Button>
       </DialogActions>
       <DialogActions>
         <Button
-          type="submit"
+          type="button"
           fullWidth
           variant="outlined"
           color="secondary"
+          onClick={() => socialLogin('google')}
         >
           Login with Google
       </Button>

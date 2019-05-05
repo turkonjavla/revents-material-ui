@@ -25,7 +25,7 @@ import TextInput from '../../../app/common/form/TextInput';
 import SocialLogin from '../SocialLogin/SocialLogin';
 
 /* Actions */
-import { login } from '../authActions';
+import { login, socialLogin } from '../authActions';
 import { closeModal } from '../../modals/modalActions'
 
 import {
@@ -76,7 +76,7 @@ const DialogTitle = withStyles(theme => ({
   );
 });
 
-const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, submitting }) => {
+const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, submitting, socialLogin }) => {
   return (
     <React.Fragment>
       <DialogTitle onClose={closeModal} />
@@ -114,7 +114,7 @@ const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, s
             Sign in
           </Button>
         </DialogActions>
-        <SocialLogin />
+        <SocialLogin socialLogin={socialLogin} />
       </form>
     </React.Fragment>
   )
@@ -122,7 +122,8 @@ const LoginForm = ({ classes, closeModal, login, handleSubmit, error, invalid, s
 
 const actions = {
   closeModal,
-  login
+  login,
+  socialLogin
 }
 
 export default compose(

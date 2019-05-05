@@ -60,3 +60,23 @@ export const registerUser = user => {
     }
   }
 }
+
+export const socialLogin = selectedProvider => {
+  return async (dispatch, getState, { getFirebase }) => {
+    const firebase = getFirebase();
+
+    try {
+      dispatch(closeModal());
+      let user = await firebase.login({
+        provider: selectedProvider,
+        type: 'popup'
+      });
+
+      const providerName = selectedProvider.charAt(0).toUpperCase() + selectedProvider.slice(1)
+      toastr.success(`${providerName} Login`, `Welcome ${user.profile.displayName}`)
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+}
