@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 
 /* Material UI Components */
 import IconButton from '@material-ui/core/IconButton';
@@ -8,11 +8,13 @@ import Menu from '@material-ui/core/Menu';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
 
 /* MUI Icons */
 import AddIcon from '@material-ui/icons/Add';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import PersonIcon from '@material-ui/icons/Person';
+import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PowerSettingsIcon from '@material-ui/icons/PowerSettingsNew';
@@ -34,7 +36,6 @@ class SignedInLinks extends Component {
     const { anchorEl } = this.state;
     const { signOut, location: { pathname }, profile } = this.props;
     const open = Boolean(anchorEl);
-
     return (
       <div>
         <IconButton
@@ -43,7 +44,7 @@ class SignedInLinks extends Component {
           onClick={this.handleMenu}
           color="inherit"
         >
-          <Avatar alt="Remy Sharp" src={profile.photoURL || '/assets/user.png'} style={{ width: '30px', height: '30px' }}/*  className={classes.avatar}  */ />
+          <Avatar alt="Remy Sharp" src={profile.photoURL || '/assets/user.png'} style={{ width: '30px', height: '30px' }} />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -59,6 +60,20 @@ class SignedInLinks extends Component {
           open={open}
           onClose={this.handleClose}
         >
+          <MenuItem style={{ background: 'none' }} disabled={false} selected={false}>
+            <ListItemIcon>
+              <Avatar alt="Remy Sharp" src={profile.photoURL || '/assets/user.png'} style={{ width: '30px', height: '30px' }} />
+            </ListItemIcon>
+            <ListItemText inset primary={profile.displayName} />
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={this.handleClose} component={Link} to="/events" selected={'/events' === pathname}>
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText inset primary={"Home"} />
+          </MenuItem>
+
           <MenuItem onClick={this.handleClose} component={Link} to="/createEvent" selected={'/createEvent' === pathname}>
             <ListItemIcon>
               <AddIcon />
@@ -87,7 +102,17 @@ class SignedInLinks extends Component {
             <ListItemText inset primary="My Profile" />
           </MenuItem>
 
-          <MenuItem onClick={this.handleClose} component={Link} to="/settings" selected={'/settings/basic' === pathname}>
+          <MenuItem
+            onClick={this.handleClose}
+            component={NavLink}
+            to="/settings"
+            selected={
+              '/settings/basic' === pathname ||
+              '/settings/about' === pathname ||
+              '/settings/photos' === pathname ||
+              '/settings/account' === pathname
+            }
+          >
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
