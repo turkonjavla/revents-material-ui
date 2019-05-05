@@ -8,6 +8,11 @@ import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
 import ScrollToTop from './app/common/util/ScrollToTop';
 
+/* Font Awesome */
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { faSignInAlt, faLock, faUserAlt } from '@fortawesome/free-solid-svg-icons';
+
 /* Redux */
 import { Provider } from 'react-redux';
 import { configureStore } from './app/store/configureStore';
@@ -46,6 +51,8 @@ if (module.hot) {
     setTimeout(render)
   })
 }
+
+library.add(fab, faSignInAlt, faLock, faUserAlt);
 
 render();
 serviceWorker.unregister();
