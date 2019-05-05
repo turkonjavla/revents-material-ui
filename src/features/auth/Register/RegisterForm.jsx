@@ -125,14 +125,13 @@ const DialogTitle = withStyles(theme => ({
 
 const styles = theme => ({
   submit: {
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 1
+    marginTop: theme.spacing.unit * 2
   }
 });
 
 const RegisterForm = ({ classes, closeModal, handleSubmit, registerUser, error, invalid, submitting }) => {
   return (
-    <div style={{ maxWidth: '400px' }}>
+    <div style={{ maxWidth: '412px' }}>
       <DialogTitle onClose={closeModal} />
       <form onSubmit={handleSubmit(registerUser)}>
         <DialogContent>
