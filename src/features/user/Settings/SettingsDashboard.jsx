@@ -1,4 +1,6 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 /* Material UI Components */
@@ -11,7 +13,9 @@ import BasicPage from './BasicPage';
 import AboutPage from './AboutPage';
 import PhotosPage from './PhotosPage';
 import AccountPage from './AccountPage';
-import SettingsNav from './SettingsNav';
+
+/* Actions */
+import { updatePassword } from '../../auth/authActions';
 
 const styles = theme => ({
   grid: {
@@ -27,36 +31,31 @@ const styles = theme => ({
     alignItems: 'center'
   },
   block: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
   }
 });
 
-const SettingsDashboard = ({ classes }) => {
+const SettingsDashboard = ({ classes, updatePassword, providerId }) => {
   return (
-    <div className={classes.root}>
+    <div style={{ marginTop: '2em' }}>
       <Grid container justify="center">
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
-          <Grid item xs={10}>
-            <div className={classes.topBar}>
-              <div className={classes.block}>
-                <Typography variant="h6" gutterBottom>Settings Dashboard</Typography>
-                <Typography variant="body1">
-                  You can update your profile settings here.
-              </Typography>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={2}>
-            <SettingsNav />
-          </Grid>
           <Grid container spacing={24} justify="center">
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={10} md={8}>
               <Switch>
                 <Redirect exact from="/settings" to="/settings/basic" />
                 <Route path="/settings/basic" component={BasicPage} />
                 <Route path="/settings/about" component={AboutPage} />
                 <Route path="/settings/photos" component={PhotosPage} />
-                <Route path="/settings/account" component={AccountPage} />
+                <Route
+                  path="/settings/account"
+                  render={() =>
+                    <AccountPage
+                      providerId={providerId}
+                      updatePassword={updatePassword}
+                    />
+                  }
+                />
               </Switch>
             </Grid>
           </Grid>
@@ -66,4 +65,15 @@ const SettingsDashboard = ({ classes }) => {
   )
 }
 
-export default withStyles(styles)(SettingsDashboard);
+const mapStateToProps = state => ({
+  providerId: state.firebase.auth.providerData[0].providerId
+});
+
+const actions = {
+  updatePassword
+}
+
+export default compose(
+  connect(mapStateToProps, actions),
+  withStyles(styles)
+)(SettingsDashboard);
