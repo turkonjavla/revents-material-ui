@@ -183,6 +183,7 @@ class EventForm extends Component {
                   <Field
                     name="category"
                     type="text"
+                    label="Category"
                     component={SelectInput}
                   >
                     {

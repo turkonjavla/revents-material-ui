@@ -12,7 +12,7 @@ export const updateProfile = user => {
 
     try {
       await firebase.updateProfile(updatedUser);
-      toastr.success('Success!', 'You have updated your profile')
+      toastr.success('Success!', 'You have updated your profile');
     }
     catch (error) {
       console.log(error);
