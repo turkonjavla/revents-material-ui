@@ -59,7 +59,7 @@ class BasicPage extends Component {
   }
 
   render() {
-    const { pristine, submitting, error, updateProfile, handleSubmit, invalid } = this.props;
+    const { pristine, submitting, error, updateProfile, handleSubmit } = this.props;
     return (
       <Paper>
         <CardHeader
@@ -118,7 +118,7 @@ class BasicPage extends Component {
               type="submit"
               variant="outlined"
               size="medium"
-              disabled={pristine || submitting || invalid}
+              disabled={pristine || submitting}
             >
               Save Changes
             </Button>
@@ -130,5 +130,5 @@ class BasicPage extends Component {
 }
 
 export default compose(
-  reduxForm({ form: 'userProfile', validate, enableReinitialize: true })
+  reduxForm({ form: 'userProfile', validate, enableReinitialize: true, destroyOnUnmount: false })
 )(BasicPage)
