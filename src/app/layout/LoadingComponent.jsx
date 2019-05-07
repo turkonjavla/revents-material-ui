@@ -16,10 +16,10 @@ const styles = theme => ({
   },
 });
 
-const LoadingComponent = ({ classes }) => {
+const LoadingComponent = ({ classes, color }) => {
   return (
     <div>
-      <CircularProgress className={classes.progress} color="primary" />
+      <CircularProgress className={classes.progress} color={color} />
     </div>
   )
 }
