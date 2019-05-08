@@ -18,9 +18,9 @@ const styles = theme => ({
 
 const LoadingComponent = ({ classes, color }) => {
   return (
-    <div>
+    <React.Fragment>
       <CircularProgress className={classes.progress} color={color} />
-    </div>
+    </React.Fragment>
   )
 }
 
