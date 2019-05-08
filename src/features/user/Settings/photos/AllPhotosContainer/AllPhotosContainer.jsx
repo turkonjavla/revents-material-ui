@@ -49,7 +49,8 @@ const AllPhotosContainer = ({ classes, loading, profile, photos, handlePhotoDele
         container spacing={24}
         alignItems="center"
         direction="row"
-        justify="flex-start">
+        justify="flex-start"
+      >
         <Grid item xs={12} sm={6} md={6} lg={4}>
           <Card className={classes.card}>
             <CardActionArea>
