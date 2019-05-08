@@ -15,12 +15,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 const styles = theme => ({
   grid: {
-/*     width: 1200, */
-    padding: '2em',
-/*     margin: `0 ${theme.spacing.unit * 2}px`,
-    [theme.breakpoints.down('sm')]: {
-      width: 'calc(100% - 20px)'
-    } */
+    padding: '2em'
   },
   media: {
     height: 250

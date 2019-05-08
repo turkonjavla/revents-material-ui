@@ -29,12 +29,7 @@ import { uploadProfileImage } from '../../../userActions';
 
 const styles = theme => ({
 	grid: {
-/* 		width: 1200, */
-		padding: '1.3em',
-/* 		margin: `0 ${theme.spacing.unit * 2}px`,
-		[theme.breakpoints.down('sm')]: {
-			width: 'calc(100% - 20px)'
-		} */
+		padding: '1.3em'
 	},
 	media: {
 		height: 250
