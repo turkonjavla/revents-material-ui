@@ -42,9 +42,9 @@ const styles = theme => ({
       width: 'calc(100% - 20px)'
     }
   },
-  card: {
-    maxWidth: 345,
-  },
+/*   card: {
+    maxWidth: '100%',
+  }, */
   media: {
     height: 250
   }
@@ -147,13 +147,13 @@ class PhotosPage extends Component {
             container
             className={classes.grid}
           >
-            <Grid item xs={12} md={4} lg={4}>
+            <Grid item xs={12} md={6} lg={4}>
               <Typography variant="subtitle1">
                 Step 1 - Add Photo
                 </Typography>
               <Card>
-                <Dropzone style={{ width: '100%' }} onDrop={this.onDrop} multiple={false}>
-                  <CardContent style={{ textAlign: 'center', paddingTop: '2.5em' }}>
+                <Dropzone style={{ width: '100%', height: '290px' }} onDrop={this.onDrop} multiple={false}>
+                  <CardContent style={{ textAlign: 'center', paddingTop: '5em' }}>
                     <IconButton>
                       <CloudUploadIcon />
                     </IconButton>
@@ -165,7 +165,7 @@ class PhotosPage extends Component {
               </Card>
 
             </Grid>
-            <Grid item xs={12} md={4} lg={4}>
+            <Grid item xs={12} md={6} lg={4}>
               {
                 this.state.files[0] &&
                 <React.Fragment>
@@ -175,7 +175,7 @@ class PhotosPage extends Component {
                   <Card className={classes.card}>
                     <CardActionArea>
                       <Cropper
-                        style={{ height: '250px' }}
+                        style={{ height: '290px', /* width: '229.33px' */ }}
                         ref="cropper"
                         src={this.state.files[0].preview}
                         aspectRation={1}
@@ -192,7 +192,7 @@ class PhotosPage extends Component {
                 </React.Fragment>
               }
             </Grid>
-            <Grid item xs={12} md={4} lg={4}>
+            <Grid item xs={12} md={6} lg={4}>
               {
                 this.state.files[0] &&
                 this.state.cropResult &&
@@ -262,7 +262,7 @@ class PhotosPage extends Component {
               alignItems="center"
               direction="row"
               justify="flex-start">
-              <Grid item xs={12} md={4} lg={4}>
+              <Grid item xs={12} sm={6} md={6} lg={4}>
                 <Card className={classes.card}>
                   <CardActionArea>
                     <CardMedia
@@ -280,7 +280,7 @@ class PhotosPage extends Component {
               {
                 photos &&
                 filteredPhotos.map(photo => (
-                  <Grid item xs={12} md={4} lg={4} key={photo.id}>
+                  <Grid item xs={12} sm={6} md={6} lg={4} key={photo.id}>
                     <Card className={classes.card}>
                       <CardActionArea>
                         <CardMedia
