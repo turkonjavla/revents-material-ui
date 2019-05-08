@@ -134,7 +134,7 @@ class PhotosPage extends Component {
             <SettingsNav />
           }
           title="Your Photos"
-          subheader="Use this to upload photos and set a profile picture"
+          subheader="Use this page to upload photos and set a profile picture"
         />
         {/* Photo Upload */}
 
