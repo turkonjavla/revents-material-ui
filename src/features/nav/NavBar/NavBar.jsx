@@ -95,7 +95,10 @@ class NavBar extends Component {
             </Typography>
             {
               authenticated ?
-                <SignedInMenu profile={profile} signOut={this.handleSignOut}
+                <SignedInMenu
+                  auth={auth}
+                  profile={profile}
+                  signOut={this.handleSignOut}
                 /> :
                 <SignedOutMenu register={this.handleRegister} signIn={this.handleSignIn} />
             }
