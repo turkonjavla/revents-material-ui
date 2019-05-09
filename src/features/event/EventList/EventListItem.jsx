@@ -50,7 +50,7 @@ class EventListItem extends Component {
       attendees &&
       Object.values(attendees).map((attendee, index) => <EventListAttendee key={index} attendee={attendee} />)
     return (
-      <Card>
+      <Card style={{ marginBottom: '2em' }}>
         <CardHeader
           align="left"
           avatar={
