@@ -8,7 +8,6 @@ import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan 
 
 import { geocodeBySuggestion } from 'mui-places-autocomplete';
 import moment from 'moment';
-import cuid from 'cuid';
 import Script from 'react-load-script';
 
 /* Material UI Components */
@@ -82,20 +81,7 @@ class EventForm extends Component {
       this.props.history.goBack();
     }
     else {
-      const newEvent = {
-        ...values,
-        id: cuid(),
-        hostPhotoURL: '/assets/user.png',
-        hostedBy: 'Ross',
-        attendees: [
-          {
-            id: cuid(),
-            name: 'Bob',
-            photoURL: '/assets/user.png'
-          }
-        ]
-      }
-      this.props.createEvent(newEvent);
+      this.props.createEvent(values);
       this.props.history.push('/events');
     }
   }
