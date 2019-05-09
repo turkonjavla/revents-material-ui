@@ -3,6 +3,7 @@ import { UPDATE_EVENT, DELETE_EVENT, FETCH_EVENTS } from './eventConstants';
 import { asyncActionStart, asyncActionFinish, asyncActionError } from '../async/asyncActions';
 import { fetchSampleData } from '../../app/data/mockApi';
 import { createNewEvent } from '../../app/common/util/helpers';
+import moment from 'moment';
 
 export const fetchEvents = events => {
   return {
@@ -15,7 +16,7 @@ export const createEvent = event => {
   return async (dispatch, getState, { getFirestore }) => {
     const firestore = getFirestore();
     const user = firestore.auth().currentUser;
-    const photoURL = getState().firebase.profile.photoURL;  
+    const photoURL = getState().firebase.profile.photoURL;
     let newEvent = createNewEvent(user, photoURL, event);
 
     try {
@@ -35,14 +36,15 @@ export const createEvent = event => {
 }
 
 export const updateEvent = event => {
-  return async dispatch => {
+  return async (dispatch, getState, { getFirestore }) => {
+    const firestore = getFirestore();
+
+    if (event.date !== getState().firestore.ordered.events[0].date) {
+      event.date = moment(event.date).toDate();
+    }
+
     try {
-      dispatch({
-        type: UPDATE_EVENT,
-        payload: {
-          event
-        }
-      });
+      await firestore.update(`events/${event.id}`, event)
       toastr.info('Update!', 'You have updated the event');
     }
     catch (error) {

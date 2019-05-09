@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withFirestore } from 'react-redux-firebase';
 import { reduxForm, Field } from 'redux-form';
 import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan } from 'revalidate';
 
@@ -72,8 +73,18 @@ class EventForm extends Component {
     scriptLoaded: false
   }
 
+  async componentDidMount() {
+    const { firestore, match } = this.props;
+    let event = await firestore.get(`events/${match.params.id}`);
+
+    if(event.exists) {
+      this.setState({
+        venueLatLng: event.data().venueLatLng
+      })
+    }
+  }
+
   onFormSubmit = values => {
-    values.date = moment(values.date).format();
     values.venueLatLng = this.state.venueLatLng;
 
     if (this.props.initialValues.id) {
@@ -249,11 +260,10 @@ EventForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const eventId = ownProps.match.params.id;
   let event = {};
 
-  if (eventId && state.events.length > 0) {
-    event = state.events.filter(event => event.id === eventId)[0];
+  if (state.firestore.ordered.events && state.firestore.ordered.events[0]) {
+    event = state.firestore.ordered.events[0]
   }
 
   return {
@@ -268,6 +278,7 @@ const actions = {
 }
 
 export default compose(
+  withFirestore,
   connect(mapStateToProps, actions),
   reduxForm({ form: 'reduxForm', enableReinitialize: true, validate }),
   withStyles(styles)
