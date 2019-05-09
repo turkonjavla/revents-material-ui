@@ -26,7 +26,7 @@ const EventDetailsHeader = ({ event }) => {
           {moment(event.date).format('dddd Do MMMM')}
         </Typography>
         <Typography variant="body2">
-          Hosted by <strong>{event.hostedBy}</strong>
+          Hosted by {event.hostedBy}
         </Typography>
       </CardContent>
       <CardActions>
