@@ -34,7 +34,7 @@ class SignedInLinks extends Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { signOut, location: { pathname }, profile } = this.props;
+    const { signOut, location: { pathname }, profile, auth } = this.props;
     const open = Boolean(anchorEl);
     return (
       <div>
@@ -95,7 +95,12 @@ class SignedInLinks extends Component {
             <ListItemText inset primary="My Network" />
           </MenuItem>
 
-          <MenuItem onClick={this.handleClose}>
+          <MenuItem
+            component={Link}
+            to={`/profile/${auth.uid}`}
+            onClick={this.handleClose}
+            selected={`/profile/${auth.uid}` === pathname}
+          >
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
