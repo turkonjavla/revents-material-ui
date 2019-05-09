@@ -53,37 +53,35 @@ class EventDashboard extends Component {
   render() {
     const { classes, events, loading } = this.props;
 
-/*     if (loading) return <LoadingComponent /> */
+    /*     if (loading) return <LoadingComponent /> */
 
     return (
       <Fragment>
-        <div className={classes.root}>
-          <Grid container justify="center">
-            <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
-              <Grid item xs={12}>
-                <div className={classes.topBar}>
-                  <div className={classes.block}>
-                    <Typography variant="h6" gutterBottom>Events</Typography>
-                    <Typography variant="body1">
-                      Check out upcoming events.
+        <Grid container justify="center">
+          <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
+            <Grid item xs={12}>
+              <div className={classes.topBar}>
+                <div className={classes.block}>
+                  <Typography variant="h6" gutterBottom>Events</Typography>
+                  <Typography variant="body1">
+                    Check out upcoming events.
                     </Typography>
-                  </div>
                 </div>
+              </div>
+            </Grid>
+            <Grid container spacing={24} justify="center">
+              <Grid item xs={12} md={8}>
+                <EventList
+                  deleteEvent={this.handleDeleteEvent}
+                  events={events}
+                />
               </Grid>
-              <Grid container spacing={24} justify="center">
-                <Grid item xs={12} md={8}>
-                  <EventList
-                    deleteEvent={this.handleDeleteEvent}
-                    events={events}
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <EventActivity />
-                </Grid>
+              <Grid item xs={12} md={4}>
+                <EventActivity />
               </Grid>
             </Grid>
           </Grid>
-        </div>
+        </Grid>
       </Fragment>
     )
   }
