@@ -10,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent }) => {
+const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingToEvent }) => {
   return (
     <Card style={{ marginBottom: '2em' }}>
       <CardMedia
@@ -36,7 +36,7 @@ const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent }) => {
             {
               isGoing ?
                 (
-                  <Button size="small" variant="outlined">
+                  <Button onClick={() => cancelGoingToEvent(event)} size="small" variant="outlined">
                     Cancel My Place
                   </Button>
                 ) :

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirestore } from 'react-redux-firebase';
-import { toastr } from 'react-redux-toastr';
 import { objectToArray } from '../../../app/common/util/helpers';
 
 /* MUI Components */
@@ -16,7 +15,7 @@ import EventDetailsSidebar from './EventDetailsSidebar';
 import EventDetailsChat from './EventDetailsChat';
 
 /* Actions */
-import { goingToEvent } from '../../user/userActions';
+import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
 
 const styles = theme => ({
   grid: {
@@ -39,19 +38,17 @@ const styles = theme => ({
 class EventDetailsPage extends Component {
 
   async componentDidMount() {
-    const { firestore, match, history: { push } } = this.props;
+    const { firestore, match } = this.props;
     await firestore.setListener(`events/${match.params.id}`);
-
   }
 
   async componentWillUnmount() {
-    const { firestore, match, history: { push } } = this.props;
+    const { firestore, match } = this.props;
     await firestore.unsetListener(`events/${match.params.id}`);
-
   }
 
   render() {
-    const { classes, event, auth, goingToEvent } = this.props;
+    const { classes, event, auth, goingToEvent, cancelGoingToEvent } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
@@ -65,6 +62,7 @@ class EventDetailsPage extends Component {
                 isGoing={isGoing}
                 event={event}
                 goingToEvent={goingToEvent}
+                cancelGoingToEvent={cancelGoingToEvent}
               />
               <EventDetailsInfo event={event} />
               <EventDetailsChat />
@@ -93,7 +91,8 @@ const mapStateToProps = (state) => {
 }
 
 const actions = {
-  goingToEvent
+  goingToEvent,
+  cancelGoingToEvent
 }
 
 export default compose(
