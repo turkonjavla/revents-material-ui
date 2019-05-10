@@ -101,10 +101,13 @@ class EventDetailsInfo extends Component {
           </ListItem>
           <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <EventDetailsMap
-                lat={event.venueLatLng.lat}
-                lng={event.venueLatLng.lng}
-              />
+              {
+                this.state.expanded &&
+                <EventDetailsMap
+                  lat={event.venueLatLng.lat}
+                  lng={event.venueLatLng.lng}
+                />
+              }
             </CardContent>
           </Collapse>
         </List>

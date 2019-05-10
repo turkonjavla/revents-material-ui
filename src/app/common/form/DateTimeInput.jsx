@@ -13,8 +13,6 @@ const DateInput = ({
   return (
     <FormControl margin="normal" fullWidth>
       <DateTimePicker
-        clearable
-        keyboard
         error={touched && !!error}
         onChange={onChange}
         format="YYYY-MM-DD HH:mm"

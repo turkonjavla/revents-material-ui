@@ -37,7 +37,7 @@ const EventDetailsSidebar = ({ attendees }) => {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={attendee.name}
+                primary={attendee.displayName}
               />
               <ListItemSecondaryAction>
                 {

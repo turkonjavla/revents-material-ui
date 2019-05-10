@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
+import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import LocationIcon from '@material-ui/icons/LocationOn';
@@ -45,12 +46,12 @@ class EventListItem extends Component {
 
   render() {
     const { classes, deleteEvent } = this.props;
-    const { id, title, venue, city, date, description, attendees, hostPhotoURL } = this.props.event;
+    const { id, title, venue, city, date, description, attendees, hostPhotoURL, cancelled } = this.props.event;
     const attendeeList =
       attendees &&
       Object.values(attendees).map((attendee, index) => <EventListAttendee key={index} attendee={attendee} />)
     return (
-      <Card>
+      <Card style={{ marginBottom: '2em' }}>
         <CardHeader
           align="left"
           avatar={
@@ -61,7 +62,11 @@ class EventListItem extends Component {
             >
             </Avatar>
           }
-          title={title}
+          title={
+            <React.Fragment>
+              {title} {cancelled && <Chip label="Cancelled" style={{ marginLeft: '0.5em' }} />}
+            </React.Fragment>
+          }
           subheader={`${moment(date).format('dddd Do MMMM')} at ${moment(date).format('hh:mm A')}`}
         />
         <CardContent>
