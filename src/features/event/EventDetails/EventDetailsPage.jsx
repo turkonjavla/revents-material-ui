@@ -15,6 +15,9 @@ import EventDetailsInfo from './EventDetailsInfo';
 import EventDetailsSidebar from './EventDetailsSidebar';
 import EventDetailsChat from './EventDetailsChat';
 
+/* Actions */
+import { goingToEvent } from '../../user/userActions';
+
 const styles = theme => ({
   grid: {
     width: 1200,
@@ -37,23 +40,32 @@ class EventDetailsPage extends Component {
 
   async componentDidMount() {
     const { firestore, match, history: { push } } = this.props;
-    let event = await firestore.get(`events/${match.params.id}`);
+    await firestore.setListener(`events/${match.params.id}`);
 
-    if (!event.exists) {
-      push('/events');
-      toastr.error('Sorry', 'Event not found')
-    }
+  }
+
+  async componentWillUnmount() {
+    const { firestore, match, history: { push } } = this.props;
+    await firestore.unsetListener(`events/${match.params.id}`);
+
   }
 
   render() {
-    const { classes, event } = this.props;
+    const { classes, event, auth, goingToEvent } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
+    const isHost = event.hostUid === auth.uid;
+    const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
           <Grid container spacing={24} justify="center">
             <Grid item xs={12} md={8}>
-              <EventDetailsHeader event={event} />
+              <EventDetailsHeader
+                isHost={isHost}
+                isGoing={isGoing}
+                event={event}
+                goingToEvent={goingToEvent}
+              />
               <EventDetailsInfo event={event} />
               <EventDetailsChat />
             </Grid>
@@ -75,13 +87,18 @@ const mapStateToProps = (state) => {
   }
 
   return {
-    event
+    event,
+    auth: state.firebase.auth
   }
+}
+
+const actions = {
+  goingToEvent
 }
 
 export default compose(
   withFirestore,
-  connect(mapStateToProps),
+  connect(mapStateToProps, actions),
   withStyles(styles)
 )(EventDetailsPage)
 

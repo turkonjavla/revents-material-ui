@@ -10,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-const EventDetailsHeader = ({ event }) => {
+const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent }) => {
   return (
     <Card style={{ marginBottom: '2em' }}>
       <CardMedia
@@ -30,15 +30,30 @@ const EventDetailsHeader = ({ event }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" variant="outlined">
-          Cancel My Place
-        </Button>
-        <Button size="small" color="primary" variant="contained">
-          Join This Event
-        </Button>
-        <Button component={Link} to={`/manage/${event.id}`} size="small" color="secondary" variant="contained">
-          Manage Event
-        </Button>
+        {
+          !isHost &&
+          <div>
+            {
+              isGoing ?
+                (
+                  <Button size="small" variant="outlined">
+                    Cancel My Place
+                  </Button>
+                ) :
+                (
+                  <Button onClick={() => goingToEvent(event)} size="small" color="primary" variant="contained">
+                    Join This Event
+                  </Button>
+                )
+            }
+          </div>
+        }
+        {
+          isHost &&
+          <Button component={Link} to={`/manage/${event.id}`} size="small" color="secondary" variant="contained">
+            Manage Event
+          </Button>
+        }
       </CardActions>
     </Card>
   )
