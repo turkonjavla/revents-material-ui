@@ -8,7 +8,6 @@ import { reduxForm, Field } from 'redux-form';
 import { composeValidators, combineValidators, isRequired, hasLengthGreaterThan } from 'revalidate';
 
 import { geocodeBySuggestion } from 'mui-places-autocomplete';
-import moment from 'moment';
 import Script from 'react-load-script';
 
 /* Material UI Components */
@@ -27,7 +26,7 @@ import DateTimeInput from '../../../app/common/form/DateTimeInput';
 import PlaceInput from '../../../app/common/form/PlaceInput';
 
 /* Event Actions */
-import { createEvent, updateEvent, deleteEvent } from '../eventActions';
+import { createEvent, updateEvent, deleteEvent, cancelToggle } from '../eventActions';
 
 const styles = theme => ({
   paper: {
@@ -75,19 +74,22 @@ class EventForm extends Component {
 
   async componentDidMount() {
     const { firestore, match } = this.props;
-    let event = await firestore.get(`events/${match.params.id}`);
+    await firestore.setListener(`events/${match.params.id}`);
+  }
 
-    if(event.exists) {
-      this.setState({
-        venueLatLng: event.data().venueLatLng
-      })
-    }
+  async componentWillUnmount() {
+    const { firestore, match } = this.props;
+    await firestore.unsetListener(`events/${match.params.id}`);
   }
 
   onFormSubmit = values => {
     values.venueLatLng = this.state.venueLatLng;
 
     if (this.props.initialValues.id) {
+      if (Object.keys(values.venueLatLng).length === 0) {
+        values.venueLatLng = this.props.event.venueLatLng;
+      }
+
       this.props.updateEvent(values);
       this.props.history.goBack();
     }
@@ -152,7 +154,7 @@ class EventForm extends Component {
   }
 
   render() {
-    const { classes, invalid, submitting, pristine } = this.props;
+    const { classes, invalid, submitting, pristine, event, cancelToggle } = this.props;
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Script
@@ -245,6 +247,16 @@ class EventForm extends Component {
                     </Button>
                     <Button onClick={() => this.props.history.push('/events')}>Cancel</Button>
                   </CardActions>
+                  <CardActions style={{ justifyContent: 'center' }}>
+                    <Button
+                      onClick={() => cancelToggle(!event.cancelled, event.id)}
+                      type="button"
+                      variant="outlined"
+                      color={event.cancelled ? 'primary' : 'secondary'}
+                    >
+                      {event.cancelled ? 'Reactivate Event' : 'Cancel Event'}
+                    </Button>
+                  </CardActions>
                 </form>
               </Paper>
             </Grid>
@@ -267,14 +279,16 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   return {
-    initialValues: event
+    initialValues: event,
+    event
   }
 }
 
 const actions = {
   createEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  cancelToggle
 }
 
 export default compose(
