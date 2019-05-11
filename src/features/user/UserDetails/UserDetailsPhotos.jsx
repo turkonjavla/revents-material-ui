@@ -1,4 +1,5 @@
 import React from 'react';
+import LazyLoad from 'react-lazyload';
 
 /* MUI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -49,13 +50,24 @@ const UserDetailsPhotos = ({ classes, photos }) => {
           {
             photos &&
             photos.map(photo => (
-              <Grid item xs={12} sm={6} md={6} lg={4} key={photo.id}>
+              <Grid item xs={12} sm={6} md={6} lg={4}>
                 <Card className={classes.card}>
                   <CardActionArea>
-                    <CardMedia
-                      className={classes.media}
-                      image={photo.url}
-                    />
+                    <LazyLoad
+                      key={photo.id}
+                      height={150}
+                      placeholder={
+                        <CardMedia
+                          className={classes.media}
+                          image='/assets/user.png'
+                        />
+                      }
+                    >
+                      <CardMedia
+                        className={classes.media}
+                        image={photo.url}
+                      />
+                    </LazyLoad>
                   </CardActionArea>
                 </Card>
               </Grid>
