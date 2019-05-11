@@ -24,6 +24,14 @@ const styles = theme => ({
 const UserDetailsPhotos = ({ classes, photos }) => {
   return (
     <Card>
+      <CardHeader
+        avatar={
+          <PhotoLibraryIcon style={{ fontSize: '2em' }} />
+        }
+        title={
+          <Typography variant="h5">Photo Library</Typography>
+        }
+      />
       <Grid
         spacing={24}
         alignItems="center"
@@ -32,14 +40,6 @@ const UserDetailsPhotos = ({ classes, photos }) => {
         container
         className={classes.grid}
       >
-        <CardHeader
-          avatar={
-            <PhotoLibraryIcon style={{ fontSize: '2em' }} />
-          }
-          title={
-            <Typography variant="h5">Photo Library</Typography>
-          }
-        />
         <Grid
           container spacing={24}
           alignItems="center"
