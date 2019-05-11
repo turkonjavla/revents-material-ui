@@ -22,6 +22,9 @@ import Divider from '@material-ui/core/Divider';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GridList from '@material-ui/core/GridList';
 
+/* MUI Icons */
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+
 /* Components */
 import EventListAttendee from './EventListAttendee';
 
@@ -46,7 +49,7 @@ class EventListItem extends Component {
   };
 
   render() {
-    const { classes, deleteEvent } = this.props;
+    const { classes } = this.props;
     const { id, title, venue, city, date, description, attendees, hostPhotoURL, cancelled, hostUid } = this.props.event;
     const attendeeList =
       attendees &&
@@ -95,8 +98,9 @@ class EventListItem extends Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          <Button component={Link} to={`/event/${id}`} color="primary">Learn More</Button>
-          <Button onClick={deleteEvent(this.props.event.id)} color="secondary">Remove</Button>
+          <Button component={Link} to={`/event/${id}`} color="primary">
+            Learn More <ChevronRightIcon />
+          </Button>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
