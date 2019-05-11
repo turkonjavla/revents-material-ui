@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
 import moment from 'moment';
+import { objectToArray } from '../../../app/common/util/helpers';
 
 /* Material UI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -46,10 +47,10 @@ class EventListItem extends Component {
 
   render() {
     const { classes, deleteEvent } = this.props;
-    const { id, title, venue, city, date, description, attendees, hostPhotoURL, cancelled } = this.props.event;
+    const { id, title, venue, city, date, description, attendees, hostPhotoURL, cancelled, hostUid } = this.props.event;
     const attendeeList =
       attendees &&
-      Object.values(attendees).map((attendee, index) => <EventListAttendee key={index} attendee={attendee} />)
+      objectToArray(attendees).map(attendee => <EventListAttendee key={attendee.id} attendee={attendee} />)
     return (
       <Card style={{ marginBottom: '2em' }}>
         <CardHeader
@@ -59,6 +60,8 @@ class EventListItem extends Component {
               src={hostPhotoURL}
               aria-label="Recipe"
               className={classes.avatar}
+              component={Link}
+              to={`/profile/${hostUid}`}
             >
             </Avatar>
           }

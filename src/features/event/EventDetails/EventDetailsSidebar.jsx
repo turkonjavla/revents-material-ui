@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 /* MUI Components */
 import Card from '@material-ui/core/Card';
@@ -13,6 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 /* MUI Icon */
 import StarIcon from '@material-ui/icons/Star';
+import { Tooltip } from '@material-ui/core';
 
 const EventDetailsSidebar = ({ attendees }) => {
   const isHost = false;
@@ -33,6 +35,8 @@ const EventDetailsSidebar = ({ attendees }) => {
                 <Avatar
                   alt={`/assets/user.png`}
                   src={attendee.photoURL}
+                  component={Link}
+                  to={`/profile/${attendee.id}`}
                 >
                 </Avatar>
               </ListItemAvatar>
@@ -41,10 +45,12 @@ const EventDetailsSidebar = ({ attendees }) => {
               />
               <ListItemSecondaryAction>
                 {
-                  isHost &&
-                  <IconButton aria-label="Delete">
-                    <StarIcon />
-                  </IconButton>
+                  attendee.host &&
+                  <Tooltip title="Event Host">
+                    <IconButton aria-label="Delete">
+                      <StarIcon />
+                    </IconButton>
+                  </Tooltip>
                 }
               </ListItemSecondaryAction>
             </ListItem>
