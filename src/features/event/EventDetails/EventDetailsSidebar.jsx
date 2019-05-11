@@ -17,7 +17,6 @@ import StarIcon from '@material-ui/icons/Star';
 import { Tooltip } from '@material-ui/core';
 
 const EventDetailsSidebar = ({ attendees }) => {
-  const isHost = false;
   return (
     <Card style={{ marginBottom: '2em' }}>
       <List
