@@ -64,7 +64,18 @@ class EventListItem extends Component {
           }
           title={
             <React.Fragment>
-              {title} {cancelled && <Chip label="Cancelled" style={{ marginLeft: '0.5em' }} />}
+              <Typography
+                variant="inherit"
+                style={{ textDecoration: 'none', color: "#000", display: 'inline' }}
+                component={Link}
+                to={`/event/${id}`}
+              >
+                {title}
+              </Typography>
+              {
+                cancelled &&
+                <Chip label="Cancelled" style={{ marginLeft: '0.5em' }} />
+              }
             </React.Fragment>
           }
           subheader={`${moment(date).format('dddd Do MMMM')} at ${moment(date).format('hh:mm A')}`}
