@@ -118,11 +118,11 @@ export const goingToEvent = event => {
   return async (dispatch, getState, { getFirestore }) => {
     const firestore = getFirestore();
     const user = firestore.auth().currentUser;
-    const photoURL = getState().firebase.profile.photoURL || '/assets/user.png';
+    const photoURL = getState().firebase.profile.photoURL;
     const attendee = {
       going: true,
       joinDate: Date.now(),
-      photoURL: photoURL,
+      photoURL: photoURL || '/assets/user.png',
       displayName: user.displayName,
       host: false
     }
