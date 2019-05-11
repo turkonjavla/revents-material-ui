@@ -8,19 +8,35 @@ import CardActions from '@material-ui/core/CardActions';
 
 /* MUI Icons */
 import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 
-const UserDetailsSidebar = () => {
+const UserDetailsSidebar = ({ isCurrentUser }) => {
   return (
     <Card>
       <CardActions>
-        <Button
-          component={Link}
-          to="/settings"
-          fullWidth
-        >
-          <EditIcon style={{ marginRight: '0.2em' }} />
-          Edit Profile
-        </Button>
+        {
+          isCurrentUser ?
+            (
+              <Button
+                component={Link}
+                to="/settings"
+                fullWidth
+              >
+              <EditIcon style={{ marginRight: '0.2em' }} />
+              Edit Profile
+            </Button>
+
+            ) :
+            (
+              <Button
+                fullWidth
+              >
+                <AddIcon style={{ marginRight: '0.2em' }} />
+                Follow
+              </Button>
+            )
+        }
+
       </CardActions>
     </Card>
   )

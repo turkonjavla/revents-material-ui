@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, isEmpty } from 'react-redux-firebase';
+import { userDetailsQuery } from '../userQueries';
 
 /* MUI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -34,7 +35,8 @@ const styles = theme => ({
 
 class UserDetailsPage extends Component {
   render() {
-    const { classes, profile, photos } = this.props;
+    const { classes, profile, photos, auth, match } = this.props;
+    const isCurrentUser = auth.uid === match.params.id;
     return (
       <Fragment>
         <Grid container justify="center">
@@ -47,7 +49,7 @@ class UserDetailsPage extends Component {
                 <UserDetailsDescription profile={profile} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <UserDetailsSidebar />
+                <UserDetailsSidebar isCurrentUser={isCurrentUser} />
               </Grid>
             </Grid>
             <Grid container style={{ marginTop: '1em' }} spacing={24} justify="flex-start">
@@ -69,25 +71,28 @@ class UserDetailsPage extends Component {
   }
 }
 
-const query = ({ auth }) => {
-  return [
-    {
-      collection: 'users',
-      doc: auth.uid,
-      subcollections: [{ collection: 'photos' }],
-      storeAs: 'photos'
-    }
-  ]
-}
+const mapStateToProps = (state, ownProps) => {
+  let userUid = null;
+  let profile = {};
+  
+  if(ownProps.match.params.id === state.auth.uid) {
+    profile = state.firebse.profile;
+  }
+  else {
+    profile = !isEmpty(state.firestore.ordered.profile) && state.firestore.ordered.profile[0];
+    userUid = ownProps.match.params.id;
+  }
 
-const mapStateToProps = state => ({
-  profile: state.firebase.profile,
-  auth: state.firebase.auth,
-  photos: state.firestore.ordered.photos
-});
+  return {
+    profile,
+    userUid,
+    auth: state.firebase.auth,
+    photos: state.firestore.ordered.photos
+  }
+}
 
 export default compose(
   connect(mapStateToProps),
-  firestoreConnect(auth => query(auth)),
+  firestoreConnect((auth, userUid) => userDetailsQuery(auth, userUid)),
   withStyles(styles)
 )(UserDetailsPage)
