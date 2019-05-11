@@ -10,8 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   card: {
-    maxWidth: '100%',
-/*     marginTop: '1em' */
+    maxWidth: '100%'
   }
 });
 
