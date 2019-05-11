@@ -24,7 +24,7 @@ const styles = theme => ({
 
 const UserDetailsPhotos = ({ classes, photos }) => {
   return (
-    <Card>
+    <Card style={{ marginTop: '2em' }}>
       <CardHeader
         avatar={
           <PhotoLibraryIcon style={{ fontSize: '2em' }} />
@@ -50,27 +50,33 @@ const UserDetailsPhotos = ({ classes, photos }) => {
           {
             photos &&
             photos.map(photo => (
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <Card className={classes.card}>
-                  <CardActionArea>
-                    <LazyLoad
-                      key={photo.id}
-                      height={150}
-                      placeholder={
+              <LazyLoad
+                key={photo.id}
+                height={150}
+                placeholder={
+                  <Grid item xs={12} sm={6} md={6} lg={4}>
+                    <Card className={classes.card}>
+                      <CardActionArea>
                         <CardMedia
                           className={classes.media}
-                          image='/assets/user.png'
+                          image={photo.url}
                         />
-                      }
-                    >
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                }
+              >
+                <Grid item xs={12} sm={6} md={6} lg={4}>
+                  <Card className={classes.card}>
+                    <CardActionArea>
                       <CardMedia
                         className={classes.media}
                         image={photo.url}
                       />
-                    </LazyLoad>
-                  </CardActionArea>
-                </Card>
-              </Grid>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              </LazyLoad>
             ))
           }
         </Grid>
