@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -51,9 +51,9 @@ class EventDashboard extends Component {
   }
 
   render() {
-    const { classes, events, loading } = this.props;
+    const { classes, events } = this.props;
 
-    /*     if (loading) return <LoadingComponent /> */
+    if (!isLoaded(events) && isEmpty(events)) return <LoadingComponent />
 
     return (
       <Fragment>
@@ -89,7 +89,7 @@ class EventDashboard extends Component {
 
 const mapStateToProps = state => ({
   events: state.firestore.ordered.events,
-  loading: state.firestore.status.requesting
+
 });
 
 const actions = {

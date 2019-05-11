@@ -14,6 +14,7 @@ import UserDetailsDescription from './UserDetailsDescription';
 import UserDetailsSidebar from './UserDetailsSidebar';
 import UserDetailsPhotos from './UserDetailsPhotos';
 import UserDetailsEvents from './UserDetailsEvents';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const styles = theme => ({
   grid: {
@@ -35,8 +36,11 @@ const styles = theme => ({
 
 class UserDetailsPage extends Component {
   render() {
-    const { classes, profile, photos, auth, match } = this.props;
+    const { classes, profile, photos, auth, match, requesting } = this.props;
     const isCurrentUser = auth.uid === match.params.id;
+    const loading = Object.values(requesting).some(a => a === true);
+
+    if (loading) return <LoadingComponent />
     return (
       <Fragment>
         <Grid container justify="center">
@@ -52,12 +56,12 @@ class UserDetailsPage extends Component {
                 <UserDetailsSidebar isCurrentUser={isCurrentUser} />
               </Grid>
             </Grid>
-            <Grid container style={{ marginTop: '1em' }} spacing={24} justify="flex-start">
+            <Grid container spacing={24} justify="flex-start">
               <Grid item xs={12} md={8}>
                 {
                   photos &&
                   photos.length > 0 &&
-                  <UserDetailsPhotos photos={photos} />
+                  <UserDetailsPhotos loding={loading} photos={photos} />
                 }
               </Grid>
               <Grid item xs={12} md={8}>
@@ -74,8 +78,8 @@ class UserDetailsPage extends Component {
 const mapStateToProps = (state, ownProps) => {
   let userUid = null;
   let profile = {};
-  
-  if(ownProps.match.params.id === state.auth.uid) {
+
+  if (ownProps.match.params.id === state.auth.uid) {
     profile = state.firebse.profile;
   }
   else {
@@ -87,7 +91,8 @@ const mapStateToProps = (state, ownProps) => {
     profile,
     userUid,
     auth: state.firebase.auth,
-    photos: state.firestore.ordered.photos
+    photos: state.firestore.ordered.photos,
+    requesting: state.firestore.status.requesting
   }
 }
 

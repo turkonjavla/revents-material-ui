@@ -59,7 +59,7 @@ const UserDetailsPhotos = ({ classes, photos }) => {
                       <CardActionArea>
                         <CardMedia
                           className={classes.media}
-                          image={photo.url}
+                          image='/assets/user.png'
                         />
                       </CardActionArea>
                     </Card>
