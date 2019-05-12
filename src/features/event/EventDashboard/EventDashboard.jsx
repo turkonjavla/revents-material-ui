@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 
 /* Material UI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 /* Components */
 import EventList from '../EventList/EventList';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import EventActivity from '../EventActivity/EventActivity';
 
-/* Event Actions */
-import { deleteEvent } from '../eventActions';
+/* Actions */
+import { getEventsForDashboard } from '../eventActions';
 
 const styles = theme => ({
   grid: {
@@ -36,45 +36,77 @@ const styles = theme => ({
 
 class EventDashboard extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
+    moreEvents: false,
+    loadingInital: true,
+    loadedEvents: []
   }
 
-  handleFormOpen = () => {
-    this.setState({
-      isOpen: true,
-      selectedEvent: null
-    })
+  async componentDidMount() {
+    let next = await this.props.getEventsForDashboard();
+
+    if (next && next.docs && next.docs.length > 1) {
+      this.setState({
+        moreEvents: true,
+        loadingInital: false
+      })
+    }
   }
 
-  handleDeleteEvent = eventId => () => {
-    this.props.deleteEvent(eventId)
+  componentWillReceiveProps(nextProps) {
+    if (this.props.events !== nextProps.events) {
+      this.setState({
+        loadedEvents: [...this.state.loadedEvents, ...nextProps.events]
+      });
+    }
+  }
+
+  getNextEvents = async () => {
+    const { events } = this.props;
+    let lastEvent = events && events[events.length - 1];
+    let next = await this.props.getEventsForDashboard(lastEvent);
+
+    if (next && next.docs && next.docs.length <= 1) {
+      this.setState({
+        moreEvents: false
+      })
+    }
   }
 
   render() {
-    const { classes, events } = this.props;
+    const { classes, loading } = this.props;
+    const { moreEvents, loadedEvents } = this.state;
 
-    if (!isLoaded(events) && isEmpty(events)) return <LoadingComponent />
+    if (this.state.loadingInital) return <LoadingComponent />
 
     return (
       <Fragment>
         <Grid container justify="center">
           <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
-            <Grid item xs={12}>
-              <div className={classes.topBar}>
-                <div className={classes.block}>
-                  <Typography variant="h6" gutterBottom>Events</Typography>
-                  <Typography variant="body1">
-                    Check out upcoming events.
-                    </Typography>
-                </div>
-              </div>
-            </Grid>
-            <Grid container spacing={24} justify="center">
+            <Grid container spacing={24} justify="center" style={{ marginTop: '2em' }}>
               <Grid item xs={12} md={8}>
                 <EventList
-                  deleteEvent={this.handleDeleteEvent}
-                  events={events}
+                  events={loadedEvents}
+                  moreEvents={moreEvents}
+                  getNextEvents={this.getNextEvents}
+                  loading={loading}
                 />
+                <Grid container justify="center">
+                  <Grid>
+                    {loading &&
+                      <CircularProgress
+                        style={{
+                          position: 'relative',
+                          top: '50%',
+                          left: '50%',
+                          marginTop: '-12px',
+                          marginLeft: '-12px',
+                          marginBottom: '20px'
+                        }}
+                      />
+                    }
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={12} md={4}>
                 <EventActivity />
@@ -88,12 +120,12 @@ class EventDashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-  events: state.firestore.ordered.events,
-
+  events: state.events,
+  loading: state.async.loading
 });
 
 const actions = {
-  deleteEvent
+  getEventsForDashboard
 }
 
 export default compose(

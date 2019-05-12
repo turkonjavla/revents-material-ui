@@ -26,7 +26,7 @@ import DateTimeInput from '../../../app/common/form/DateTimeInput';
 import PlaceInput from '../../../app/common/form/PlaceInput';
 
 /* Event Actions */
-import { createEvent, updateEvent, deleteEvent, cancelToggle } from '../eventActions';
+import { createEvent, updateEvent, cancelToggle } from '../eventActions';
 
 const styles = theme => ({
   paper: {
@@ -287,7 +287,6 @@ const mapStateToProps = (state, ownProps) => {
 const actions = {
   createEvent,
   updateEvent,
-  deleteEvent,
   cancelToggle
 }
 
