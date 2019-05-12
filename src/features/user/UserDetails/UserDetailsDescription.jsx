@@ -20,6 +20,7 @@ const UserDetailsDescription = ({ classes, profile }) => {
   if (profile.createdAt) {
     createdAt = moment(profile.createdAt).format('MMMM Do YYYY');
   }
+  
   return (
     <Card className={classes.card}>
       <Grid container>
