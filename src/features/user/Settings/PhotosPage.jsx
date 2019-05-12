@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 import { firestoreConnect } from 'react-redux-firebase';
 
 /* MUI Components */
-import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -18,60 +18,57 @@ import SettingsNav from './SettingsNav';
 import PhotoUploadContainer from './photos/PhotoUploadContainer/PhotoUploadContainer';
 import AllPhotosContainer from './photos/AllPhotosContainer/AllPhotosContainer';
 
-class PhotosPage extends Component {
+const PhotosPage = (props) => {
+  const { photos, profile, loading, auth, deletePhoto, setMainPhoto } = props;
 
-  handlePhotoDelete = photo => async () => {
+  const handlePhotoDelete = photo => async () => {
     try {
-      this.props.deletePhoto(photo);
+      deletePhoto(photo);
     }
     catch (error) {
       toastr.error('Oops', error.message)
     }
   }
 
-  handleSetMainPhoto = photo => async () => {
+  const handleSetMainPhoto = photo => async () => {
     try {
-      this.props.setMainPhoto(photo);
+      setMainPhoto(photo);
     }
     catch (error) {
-      toastr.error('Oop', error.message);
+      toastr.error('Oops', error.message);
     }
   }
-
-  render() {
-    const { photos, profile, loading, auth } = this.props;
-    return (
-      <Paper>
-        <CardHeader
-          action={
-            <SettingsNav />
-          }
-          title="Your Photos"
-          subheader="Use this page to upload photos and set a profile picture"
+  return (
+    <Card>
+      <CardHeader
+        action={
+          <SettingsNav />
+        }
+        title="Your Photos"
+        subheader="Use this page to upload photos and set a profile picture"
+      />
+      {/* Photo Upload */}
+      <Grid container justify="flex-start">
+        <PhotoUploadContainer
+          loading={loading}
         />
-        {/* Photo Upload */}
-        <Grid container justify="flex-start">
-          <PhotoUploadContainer
-            loading={loading}
-          />
-        </Grid>
+      </Grid>
 
-        <Divider variant="middle" />
+      <Divider variant="middle" />
 
-        {/* Photo Select */}
-        <Grid container justify="flex-start">
-          <AllPhotosContainer
-            handlePhotoDelete={this.handlePhotoDelete}
-            handleSetMainPhoto={this.handleSetMainPhoto}
-            loading={loading}
-            profile={profile}
-            photos={photos}
-            auth={auth}
-          />
-        </Grid>
-      </Paper>
-    )
-  }
+      {/* Photo Select */}
+      <Grid container justify="flex-start">
+        <AllPhotosContainer
+          handlePhotoDelete={handlePhotoDelete}
+          handleSetMainPhoto={handleSetMainPhoto}
+          loading={loading}
+          profile={profile}
+          photos={photos}
+          auth={auth}
+        />
+      </Grid>
+    </Card>
+  )
 }
 
 const mapStateToProps = state => ({
