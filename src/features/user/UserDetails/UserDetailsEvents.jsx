@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 /* MUI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -8,6 +10,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
@@ -36,17 +39,8 @@ const styles = theme => ({
 });
 
 class UserDetailsEvents extends Component {
-  state = {
-    value: 0
-  }
-
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
   render() {
-    const { classes } = this.props;
-    const { value } = this.state;
+    const { classes, events, eventsLoading, changeTab, value } = this.props;
     return (
       <Card>
         <CardHeader
@@ -60,130 +54,69 @@ class UserDetailsEvents extends Component {
         <div style={{ padding: '0.5em' }}>
           <Grid>
             <AppBar position="static">
-              <Tabs value={value} onChange={this.handleChange} scrollButtons="on" variant="scrollable">
-                <Tab label="All events" />
-                <Tab label="Past Events" />
-                <Tab label="Future Events" />
-                <Tab label="Events Hosted" />
+              <Tabs
+                value={value}
+                onChange={(e, data) => changeTab(e, data)}
+                scrollButtons="on"
+                variant="scrollable"
+              >
+                <Tab disabled={eventsLoading} label="All events" />
+                <Tab disabled={eventsLoading} label="Past Events" />
+                <Tab disabled={eventsLoading} label="Future Events" />
+                <Tab disabled={eventsLoading} label="Events Hosted" />
               </Tabs>
             </AppBar>
           </Grid>
         </div>
-        {
-          value === 0 &&
           <TabContainer>
-            <Grid
-              spacing={24}
-              alignItems="center"
-              direction="row"
-              justify="flex-start"
-              container
-              className={classes.grid}
-            >
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <Card>
-                  <CardActionArea>
-                    <CardMedia
-                      className={classes.media}
-                      image="/assets/categoryImages/drinks.jpg"
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
-                      </Typography>
-                      <Typography component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      Share
-                    </Button>
-                    <Button size="small" color="primary">
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            </Grid>
+            {
+              eventsLoading ?
+                <CircularProgress
+                color="secondary"
+                  style={{
+                    position: 'relative',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '5em',
+                    marginLeft: '-12px',
+                    marginBottom: '5em'
+                  }}
+                /> :
+                (<Grid
+                  spacing={24}
+                  alignItems="center"
+                  direction="row"
+                  justify="flex-start"
+                  container
+                  className={classes.grid}
+                >
+                  {
+                    events &&
+                    events.map(event => (
+                      <Grid item xs={12} sm={6} md={6} lg={4} key={event.id}>
+                        <Card>
+                          <CardActionArea component={Link} to={`/event/${event.id}`}>
+                            <CardMedia
+                              className={classes.media}
+                              image={`/assets/categoryImages/${event.category}.jpg`}
+                              title={event.title}
+                            />
+                            <CardContent>
+                              <Typography gutterBottom variant="h5" component="h2">
+                                {event.title}
+                              </Typography>
+                              <Typography gutterBottom variant="subtitle2">
+                                {moment(event.date).format('dddd Do MMMM')} at {moment(event.date).format('hh:mm A')}
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                    ))
+                  }
+                </Grid>)
+            }
           </TabContainer>
-        }
-        {
-          value === 1 &&
-          <TabContainer>
-            <Grid
-              spacing={16}
-              alignItems="center"
-              direction="row"
-              justify="flex-start"
-              container
-              className={classes.grid}
-            >
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <Card className={classes.card}>
-                  <CardActionArea>
-                    <CardMedia
-                      className={classes.media}
-                      image="/assets/categoryImages/drinks.jpg"
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
-                      </Typography>
-                      <Typography component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      Share
-                    </Button>
-                    <Button size="small" color="primary">
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <Card className={classes.card}>
-                  <CardActionArea>
-                    <CardMedia
-                      className={classes.media}
-                      image="/assets/categoryImages/drinks.jpg"
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
-                      </Typography>
-                      <Typography component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      Share
-                    </Button>
-                    <Button size="small" color="primary">
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-
-            </Grid>
-          </TabContainer>
-        }
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
-        {value === 3 && <TabContainer>Item Four</TabContainer>}
       </Card>
 
     )
