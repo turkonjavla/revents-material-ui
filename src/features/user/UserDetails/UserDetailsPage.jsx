@@ -41,11 +41,7 @@ class UserDetailsPage extends Component {
   state = {
     value: 0
   }
-
-  async componentDidMount() {
-    let events = await this.props.getUserEvents(this.props.userUid);
-  }
-
+  
   changeTab = (e, data) => {
     this.props.getUserEvents(this.props.userUid, data);
     this.setState({ value: data })

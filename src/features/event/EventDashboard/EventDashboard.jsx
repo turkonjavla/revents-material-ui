@@ -74,7 +74,7 @@ class EventDashboard extends Component {
   }
 
   render() {
-    const { classes, loading } = this.props;
+    const { classes, loading, activities } = this.props;
     const { moreEvents, loadedEvents } = this.state;
 
     if (this.state.loadingInital) return <LoadingComponent />
@@ -109,7 +109,7 @@ class EventDashboard extends Component {
                 </Grid>
               </Grid>
               <Grid item xs={12} md={4}>
-                <EventActivity />
+                <EventActivity activities={activities} />
               </Grid>
             </Grid>
           </Grid>
@@ -119,9 +119,18 @@ class EventDashboard extends Component {
   }
 }
 
+const query = [
+  {
+    collection: 'activity',
+    orderBy: ['timestamp', 'desc'],
+    limit: 5
+  }
+]
+
 const mapStateToProps = state => ({
   events: state.events,
-  loading: state.async.loading
+  loading: state.async.loading,
+  activities: state.firestore.ordered.activity
 });
 
 const actions = {
@@ -130,6 +139,6 @@ const actions = {
 
 export default compose(
   connect(mapStateToProps, actions),
-  firestoreConnect([{ collection: 'events' }]),
+  firestoreConnect(query),
   withStyles(styles)
 )(EventDashboard);
