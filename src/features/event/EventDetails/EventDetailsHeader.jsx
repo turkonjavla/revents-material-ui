@@ -22,10 +22,10 @@ const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingT
         <Typography gutterBottom variant="h5" component="h2">
           {event.title}
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="subtitle1">
           {moment(event.date).format('dddd Do MMMM')}
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="subtitle1">
           Hosted by {event.hostedBy}
         </Typography>
       </CardContent>
