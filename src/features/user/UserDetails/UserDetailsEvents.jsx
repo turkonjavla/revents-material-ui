@@ -98,10 +98,10 @@ const UserDetailsEvents = ({ classes, events, eventsLoading, changeTab, value })
                           title={event.title}
                         />
                         <CardContent>
-                          <Typography gutterBottom variant="h5" component="h2">
+                          <Typography gutterBottom variant="subtitle1" component="h2">
                             {event.title}
                           </Typography>
-                          <Typography gutterBottom variant="subtitle2">
+                          <Typography gutterBottom variant="subtitle1">
                             {moment(event.date).format('dddd Do MMMM')} at {moment(event.date).format('hh:mm A')}
                           </Typography>
                         </CardContent>
