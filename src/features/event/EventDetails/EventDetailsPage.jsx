@@ -116,4 +116,3 @@ export default compose(
   firebaseConnect(props => ([`event_chat/${props.match.params.id}`])),
   withStyles(styles)
 )(EventDetailsPage)
-

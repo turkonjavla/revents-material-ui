@@ -5,12 +5,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card'
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
+import EventActivityItem from './EventActivityItem';
 
 const styles = theme => ({
   root: {
@@ -23,44 +19,20 @@ const styles = theme => ({
   },
 });
 
-const EventActivity = ({ classes }) => {
-  const recentActivity = false;
+const EventActivity = ({ classes, activities }) => {
   return (
     <Card>
       <List
-        className={classes.root}
+        className={styles.root}
         subheader={
           <ListSubheader>
             Recent Activity
-          </ListSubheader>
+        </ListSubheader>
         }
       >
         {
-          recentActivity ?
-            (
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Remy Sharp" src="/assets/user.png" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Brunch this weekend?"
-                  secondary={
-                    <React.Fragment>
-                      <Typography component="span" className={classes.inline} color="textPrimary">
-                        Ali Connors
-              </Typography>
-                      {" — I'll be in your neighborhood doing errands this…"}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-            ) : (
-              <ListItem alignItems="flex-start">
-                <ListItemText
-                  primary="No Recent activity"
-                />
-              </ListItem>
-            )
+          activities &&
+          activities.map(activity => <EventActivityItem key={activity.id} activity={activity} />)
         }
       </List>
     </Card>
