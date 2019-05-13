@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withFirestore } from 'react-redux-firebase';
-import { objectToArray } from '../../../app/common/util/helpers';
+import { withFirestore, firebaseConnect, isEmpty } from 'react-redux-firebase';
+import { objectToArray, createDataTree } from '../../../app/common/util/helpers';
 
 /* MUI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -17,6 +17,7 @@ import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 /* Actions */
 import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
+import { addEventComment } from '../eventActions';
 
 const styles = theme => ({
   grid: {
@@ -49,13 +50,14 @@ class EventDetailsPage extends Component {
   }
 
   render() {
-    const { classes, event, auth, goingToEvent, cancelGoingToEvent, requesting } = this.props;
+    const { classes, event, auth, goingToEvent, cancelGoingToEvent, requesting, addEventComment, eventChat } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     const loading = Object.values(requesting).some(a => a === true);
+    const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
 
-    if(loading) return <LoadingComponent />
+    if (loading) return <LoadingComponent />
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
@@ -69,7 +71,11 @@ class EventDetailsPage extends Component {
                 cancelGoingToEvent={cancelGoingToEvent}
               />
               <EventDetailsInfo event={event} />
-              <EventDetailsChat />
+              <EventDetailsChat
+                addEventComment={addEventComment}
+                eventId={event.id}
+                eventChat={chatTree}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
               <EventDetailsSidebar attendees={attendees} />
@@ -81,7 +87,7 @@ class EventDetailsPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   let event = {};
 
   if (state.firestore.ordered.events && state.firestore.ordered.events[0]) {
@@ -91,18 +97,23 @@ const mapStateToProps = (state) => {
   return {
     event,
     auth: state.firebase.auth,
-    requesting: state.firestore.status.requesting
+    requesting: state.firestore.status.requesting,
+    eventChat:
+      !isEmpty(state.firebase.data.event_chat) &&
+      objectToArray(state.firebase.data.event_chat[ownProps.match.params.id])
   }
 }
 
 const actions = {
   goingToEvent,
-  cancelGoingToEvent
+  cancelGoingToEvent,
+  addEventComment
 }
 
 export default compose(
   withFirestore,
   connect(mapStateToProps, actions),
+  firebaseConnect(props => ([`event_chat/${props.match.params.id}`])),
   withStyles(styles)
 )(EventDetailsPage)
 

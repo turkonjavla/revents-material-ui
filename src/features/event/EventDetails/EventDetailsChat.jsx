@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 /* MUI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -12,8 +14,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import ReplyIcon from '@material-ui/icons/Reply';
+
+/* Components */
+import EventDetailsChatForm from './EventDetailsChatForm';
 
 const styles = theme => ({
   root: {
@@ -31,160 +34,131 @@ const styles = theme => ({
   },
 });
 
-const EventDetailsChat = ({ classes }) => {
-  return (
-    <Card style={{ marginBottom: '1em' }}>
-      <List
-        subheader={
-          <ListSubheader>
-            Chat about this event
-          </ListSubheader>
-        }
-        className={classes.root}>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/assets/user.png" />
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              `Phasellus pretium sed lacus in sagittis. Fusce lacus libero, euismod non lorem ut, 
-            convallis tempor tortor. Morbi quis tellus vitae augue ultrices tincidunt id vel diam. 
-            Sed vitae tempor tellus. Quisque laoreet, justo nec interdum fermentum, odio neque efficitur turpis, a mollis ligula orci in magna. 
-            Suspendisse odio tellus, consequat at dapibus vitae, ultricies non nisl. Sed sodales tincidunt quam, id auctor velit vestibulum congue.`
-            }
-            secondary={
-              <React.Fragment>
-                <Typography component="span" className={classes.inline} color="textPrimary">
-                  Ali Connor
-              </Typography>
-                {
-                  ` — Today at 12:34 PM `
-                }
-                <Button size="small">Reply</Button>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/assets/user.png" />
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              `Phasellus pretium sed lacus in sagittis. Fusce lacus libero, euismod non lorem ut, 
-            convallis tempor tortor. Morbi quis tellus vitae augue ultrices tincidunt id vel diam. 
-            Sed vitae tempor tellus.`
-            }
-            secondary={
-              <React.Fragment>
-                <Typography component="span" className={classes.inline} color="textPrimary">
-                  Ali Connor
-              </Typography>
-                {
-                  ` — Today at 12:34 PM `
-                }
-                <Button size="small">Reply</Button>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
+class EventDetailsChat extends Component {
+  state = {
+    showReplyForm: false,
+    selectedCommentId: null
+  }
 
-        {/* Nested List - Replies */}
+  handleOpenReplyForm = id => () => {
+    this.setState({
+      showReplyForm: true,
+      selectedCommentId: id
+    })
+  }
 
+  handleCloseReplyForm = () => {
+    this.setState({
+      selectedCommentId: null,
+      showReplyForm: false
+    })
+  }
+
+  render() {
+    const { classes, addEventComment, eventId, eventChat } = this.props;
+    const { showReplyForm, selectedCommentId } = this.state;
+    return (
+      <Card style={{ marginBottom: '1em' }}>
         <List
+          subheader={
+            <ListSubheader>
+              Chat about this event
+            </ListSubheader>
+          }
           className={classes.root}
-          style={{ marginLeft: '1.5em' }}
         >
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src="/assets/user.png" />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                `Phasellus pretium sed lacus in sagittis. Fusce lacus libero, euismod non lorem ut, 
-            convallis tempor tortor. Morbi quis tellus vitae augue ultrices tincidunt id vel diam. 
-            Sed vitae tempor tellus.`
-              }
-              secondary={
-                <React.Fragment>
-                  <Typography component="span" className={classes.inline} color="textPrimary">
-                    Ali Connor
-              </Typography>
-                  {
-                    ` — Just now`
-                  }
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src="/assets/user.png" />
-            </ListItemAvatar>
-            <ListItemText
-              primary={
-                `Phasellus pretium sed lacus in sagittis. Fusce lacus libero, euismod non lorem ut, 
-            convallis tempor tortor. Morbi quis tellus vitae augue ultrices tincidunt id vel diam. 
-            Sed vitae tempor tellus.`
-              }
-              secondary={
-                <React.Fragment>
-                  <Typography component="span" className={classes.inline} color="textPrimary">
-                    Ali Connor
-              </Typography>
-                  {
-                    ` — Just now`
-                  }
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-        </List>
-
-        {/* End of nested list */}
-
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/assets/user.png" />
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              `Sed vitae tempor tellus. Quisque laoreet, justo nec interdum fermentum, odio neque efficitur turpis, a mollis ligula orci in magna. 
-            Sed porta dolor fringilla metus fringilla, quis pretium enim egestas. Phasellus quis ultricies felis.
-            Suspendisse odio tellus, consequat at dapibus vitae, ultricies non nisl. Sed sodales tincidunt quam, id auctor velit vestibulum congue.`
-            }
-            secondary={
-              <React.Fragment>
-                <Typography component="span" className={classes.inline} color="textPrimary">
-                  Ali Connor
-              </Typography>
+          {
+            eventChat &&
+            eventChat.map(comment => (
+              <div key={comment.id}>
+                <ListItem alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar component={Link} to={`/profile/${comment.uid}`} alt={comment.displayName} src={comment.photoURL || `/assets/user.png`} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={comment.text}
+                    secondary={
+                      <React.Fragment>
+                        <Typography component="span" className={classes.inline} color="textPrimary">
+                          {comment.displayName}
+                        </Typography>
+                        {
+                          ` — ${moment(comment.date).fromNow()} `
+                        }
+                        <Button onClick={this.handleOpenReplyForm(comment.id)} size="small">Reply</Button>
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
                 {
-                  ` — Today at 12:34 PM `
+                  showReplyForm &&
+                  selectedCommentId === comment.id &&
+                  (
+                    <div style={{ width: '90%', marginLeft: '2em' }}>
+                      <EventDetailsChatForm
+                        addEventComment={addEventComment}
+                        closeForm={this.handleCloseReplyForm}
+                        parentId={comment.id}
+                        eventId={eventId}
+                        form={`reply_${comment.id}`}
+                      />
+                    </div>
+                  )
                 }
-                <Button size="small">Reply</Button>
-              </React.Fragment>
-            }
+                {
+                  comment.childNodes &&
+                  comment.childNodes.map(child => (
+                    <div style={{ marginLeft: '1.5em' }} key={child.id} >
+                      <ListItem alignItems="flex-start">
+                        <ListItemAvatar>
+                          <Avatar component={Link} to={`/profile/${child.uid}`} alt={child.displayName} src={child.photoURL || `/assets/user.png`} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={child.text}
+                          secondary={
+                            <React.Fragment>
+                              <Typography component="span" className={classes.inline} color="textPrimary">
+                                {child.displayName}
+                              </Typography>
+                              {
+                                ` — ${moment(child.date).fromNow()} `
+                              }
+                              <Button onClick={this.handleOpenReplyForm(child.id)} size="small">Reply</Button>
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                      {
+                        showReplyForm &&
+                        selectedCommentId === child.id &&
+                        (
+                          <div style={{ width: '90%', marginLeft: '2em' }}>
+                            <EventDetailsChatForm
+                              addEventComment={addEventComment}
+                              closeForm={this.handleCloseReplyForm}
+                              parentId={child.parentId}
+                              eventId={eventId}
+                              form={`reply_${child.id}`}
+                            />
+                          </div>
+                        )
+                      }
+                    </div>
+                  ))
+                }
+              </div>
+            ))
+          }
+          <EventDetailsChatForm
+            parentId={0}
+            addEventComment={addEventComment}
+            eventId={eventId}
+            form={`newComment`}
           />
-        </ListItem>
-        <ListItem>
-
-          <TextField
-            label="Write a reply"
-            multiline
-            rows="4"
-            style={{ width: '100%' }}
-            margin="normal"
-          />
-        </ListItem>
-        <ListItem>
-          <Button variant="outlined" size="medium" className={classes.button}>
-            <ReplyIcon />
-            Reply
-          </Button>
-        </ListItem>
-      </List>
-    </Card>
-  )
+        </List>
+      </Card>
+    )
+  }
 }
 
 EventDetailsChat.propTypes = {
