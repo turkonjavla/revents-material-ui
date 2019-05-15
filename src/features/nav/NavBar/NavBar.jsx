@@ -127,14 +127,15 @@ class NavBar extends Component {
                 <ListItemText primary="Create Event" />
               </ListItem>
             }
-
-            <ListItem button component={Link} to="/people" selected={'/people' === pathname}>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="People Dashboard" />
-            </ListItem>
-
+            {
+              authenticated &&
+              <ListItem button component={Link} to="/people" selected={'/people' === pathname}>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="People Dashboard" />
+              </ListItem>
+            }
             <ListItem button component={Link} to="/test" selected={'/test' === pathname}>
               <ListItemText primary="Test Area" />
             </ListItem>

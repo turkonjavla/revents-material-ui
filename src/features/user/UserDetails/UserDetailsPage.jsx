@@ -17,7 +17,7 @@ import UserDetailsEvents from './UserDetailsEvents';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 /* Actions */
-import { getUserEvents } from '../userActions';
+import { getUserEvents, followUser, unfollowUser } from '../userActions';
 
 const styles = theme => ({
   grid: {
@@ -41,16 +41,17 @@ class UserDetailsPage extends Component {
   state = {
     value: 0
   }
-  
+
   changeTab = (e, data) => {
     this.props.getUserEvents(this.props.userUid, data);
     this.setState({ value: data })
   }
 
   render() {
-    const { classes, profile, photos, auth, match, requesting, events, eventsLoading } = this.props;
+    const { classes, profile, photos, auth, match, requesting, events, eventsLoading, followUser, following, unfollowUser } = this.props;
     const isCurrentUser = auth.uid === match.params.id;
     const loading = Object.values(requesting).some(a => a === true);
+    const isFollowing = !isEmpty(following);
 
     if (loading) return <LoadingComponent />
     return (
@@ -65,7 +66,13 @@ class UserDetailsPage extends Component {
                 <UserDetailsDescription profile={profile} />
               </Grid>
               <Grid item xs={12} md={4}>
-                <UserDetailsSidebar isCurrentUser={isCurrentUser} />
+                <UserDetailsSidebar
+                  isFollowing={isFollowing}
+                  unfollowUser={unfollowUser}
+                  isCurrentUser={isCurrentUser}
+                  followUser={followUser}
+                  profile={profile}
+                />
               </Grid>
             </Grid>
             <Grid container spacing={24} justify="flex-start">
@@ -110,16 +117,19 @@ const mapStateToProps = (state, ownProps) => {
     events: state.events, eventsLoading: state.async.loading,
     auth: state.firebase.auth,
     photos: state.firestore.ordered.photos,
-    requesting: state.firestore.status.requesting
+    requesting: state.firestore.status.requesting,
+    following: state.firestore.ordered.following
   }
 }
 
 const actions = {
-  getUserEvents
+  getUserEvents,
+  followUser,
+  unfollowUser
 }
 
 export default compose(
   connect(mapStateToProps, actions),
-  firestoreConnect((auth, userUid) => userDetailsQuery(auth, userUid)),
+  firestoreConnect((auth, userUid, match) => userDetailsQuery(auth, userUid, match)),
   withStyles(styles)
 )(UserDetailsPage)
