@@ -156,9 +156,10 @@ export const setMainPhoto = photo => {
 }
 
 export const goingToEvent = event => {
-  return async (dispatch, getState, { getFirestore }) => {
-    const firestore = getFirestore();
-    const user = firestore.auth().currentUser;
+  return async (dispatch, getState) => {
+    dispatch(asyncActionStart());
+    const firestore = firebase.firestore();
+    const user = firebase.auth().currentUser;
     const photoURL = getState().firebase.profile.photoURL;
     const attendee = {
       going: true,
@@ -169,19 +170,27 @@ export const goingToEvent = event => {
     }
 
     try {
-      await firestore.update(`events/${event.id}`, {
-        [`attendees.${user.uid}`]: attendee
-      });
-      await firestore.set(`event_attendee/${event.id}_${user.uid}`, {
-        eventId: event.id,
-        userUid: user.uid,
-        eventDate: event.date,
-        host: false
-      });
-      toastr.success('Success!', 'You have signed up to the event')
+      let eventDocRef = firestore.collection('events').doc(event.id);
+      let eventAttendeeDocRef = firestore.collection('event_attendee').doc(`${event.id}_${user.uid}`);
+
+      await firestore.runTransaction(async transaction => {
+        await transaction.get(eventDocRef);
+        await transaction.update(eventDocRef, {
+          [`attendees.${user.uid}`]: attendee
+        })
+        await transaction.set(eventAttendeeDocRef, {
+          eventId: event.id,
+          userUid: user.uid,
+          eventDate: event.date,
+          host: false
+        })
+      })
+      toastr.success('Success!', 'You have signed up to the event');
+      dispatch(asyncActionFinish());
     }
     catch (error) {
       console.log(error);
+      dispatch(asyncActionError());
       toastr.error('Oops', 'Problem singing up to event');
     }
   }
@@ -189,6 +198,7 @@ export const goingToEvent = event => {
 
 export const cancelGoingToEvent = event => {
   return async (dispatch, getState, { getFirestore }) => {
+    dispatch(asyncActionStart());
     const firestore = getFirestore();
     const user = firestore.auth().currentUser;
 
@@ -197,10 +207,12 @@ export const cancelGoingToEvent = event => {
         [`attendees.${user.uid}`]: firestore.FieldValue.delete()
       });
       await firestore.delete(`event_attendee/${event.id}_${user.uid}`);
+      dispatch(asyncActionFinish());
       toastr.success('Success!', 'You have removed yourself from the event');
     }
     catch (error) {
       console.log(error);
+      dispatch(asyncActionError());
       toastr.error('Oops', 'Something went wrong');
     }
   }
