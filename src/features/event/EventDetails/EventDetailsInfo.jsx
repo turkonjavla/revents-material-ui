@@ -77,7 +77,7 @@ class EventDetailsInfo extends Component {
               <CalendarTodayIcon />
             </ListItemIcon>
             <ListItemText primary={
-              `${moment(event.date).format('dddd Do MMMM')} at ${moment(event.date).format('hh:mm A')}`
+              `${moment(event.date).format('dddd Do MMMM YYYY')} at ${moment(event.date).format('hh:mm A')}`
             }
             />
           </ListItem>

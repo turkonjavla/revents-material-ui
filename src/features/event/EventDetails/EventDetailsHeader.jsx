@@ -23,7 +23,7 @@ const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingT
           {event.title}
         </Typography>
         <Typography variant="subtitle1">
-          {moment(event.date).format('dddd Do MMMM')}
+          {moment(event.date).format('dddd Do MMMM YYYY')}
         </Typography>
         <Typography variant="subtitle1">
           Hosted by {event.hostedBy}
