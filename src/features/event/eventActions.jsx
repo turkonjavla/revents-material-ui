@@ -14,6 +14,7 @@ export const createEvent = event => {
     let newEvent = createNewEvent(user, photoURL, event);
 
     try {
+      dispatch(asyncActionStart());
       let createdEvent = await firestore.add(`events`, newEvent);
       await firestore.set(`event_attendee/${createdEvent.id}_${user.uid}`, {
         eventId: createdEvent.id,
@@ -22,8 +23,10 @@ export const createEvent = event => {
         host: true
       });
       toastr.success('Success!', 'Event has been created');
+      dispatch(asyncActionFinish());
     }
     catch (error) {
+      dispatch(asyncActionError());
       toastr.error('Error!', 'Oops, something went wrong');
     }
   }
@@ -58,15 +61,14 @@ export const updateEvent = event => {
           await batch.update(eventAttendeeDocRef, {
             eventDate: event.date
           });
+          await batch.commit();
+          toastr.info('Update!', 'You have updated the event');
         }
+        dispatch(asyncActionFinish());
       }
       else {
         await eventDocRef.update(event)
       }
-
-      toastr.info('Update!', 'You have updated the event');
-      await batch.commit();
-      dispatch(asyncActionFinish());
     }
 
     catch (error) {

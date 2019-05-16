@@ -27,6 +27,7 @@ import PlaceInput from '../../../app/common/form/PlaceInput';
 
 /* Event Actions */
 import { createEvent, updateEvent, cancelToggle } from '../eventActions';
+import { CircularProgress } from '@material-ui/core';
 
 const styles = theme => ({
   paper: {
@@ -82,7 +83,7 @@ class EventForm extends Component {
     await firestore.unsetListener(`events/${match.params.id}`);
   }
 
-  onFormSubmit = values => {
+  onFormSubmit = async values => {
     values.venueLatLng = this.state.venueLatLng;
 
     if (this.props.initialValues.id) {
@@ -90,11 +91,11 @@ class EventForm extends Component {
         values.venueLatLng = this.props.event.venueLatLng;
       }
 
-      this.props.updateEvent(values);
+      await this.props.updateEvent(values);
       this.props.history.goBack();
     }
     else {
-      this.props.createEvent(values);
+      await this.props.createEvent(values);
       this.props.history.push('/events');
     }
   }
@@ -244,6 +245,10 @@ class EventForm extends Component {
                       disabled={pristine || invalid || submitting || loading}
                     >
                       Submit
+                      {
+                        loading &&
+                        <CircularProgress size={20} style={{marginLeft: '0.5em'}} color="primary" />
+                      }
                     </Button>
                     <Button disabled={loading} onClick={() => this.props.history.push('/events')}>Cancel</Button>
                   </CardActions>
