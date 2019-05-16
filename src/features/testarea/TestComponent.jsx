@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 
 /* Test Actions */
-import { incrementAsync, decrementAsync } from './testActions';
+import { incrementAsync, decrementAsync, testPermission } from './testActions';
 
 /* Modals */
 import { openModal } from '../modals/modalActions';
@@ -92,7 +92,7 @@ class TestComponent extends Component {
   onChange = address => this.setState({ address })
 
   render() {
-    const { data, openModal, incrementAsync, decrementAsync, loading, classes } = this.props;
+    const { data, openModal, incrementAsync, decrementAsync, loading, classes, testPermission } = this.props;
     const inputProps = {
       value: this.state.address,
       onChange: this.onChange
@@ -107,8 +107,7 @@ class TestComponent extends Component {
         <h2>{data}</h2>
         <Button disabled={loading} onClick={incrementAsync} variant="outlined" color="primary">Increment</Button>
         <Button disabled={loading} onClick={decrementAsync} variant="outlined" color="secondary">Decrement</Button>
-
-
+        <Button disabled={loading} onClick={testPermission} variant="outlined">Update Profile</Button>
         <br />
         <br />
         <div>
@@ -147,7 +146,8 @@ const mapStateToProps = state => ({
 const actions = {
   incrementAsync,
   decrementAsync,
-  openModal
+  openModal,
+  testPermission
 }
 
 export default compose(
