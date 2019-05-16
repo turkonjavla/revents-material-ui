@@ -21,9 +21,6 @@ import Typography from '@material-ui/core/Typography';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import IconButton from '@material-ui/core/IconButton';
 
-/* Components */
-import LoadingComponent from '../../../../../app/layout/LoadingComponent';
-
 /* Actions */
 import { uploadProfileImage } from '../../../userActions';
 
@@ -151,10 +148,6 @@ class PhotoUploadContainer extends Component {
 							</Typography>
 							<Card className={classes.card}>
 								<CardActionArea>
-									{
-										loading &&
-										<LoadingComponent color="secondary" text="Uploading" />
-									}
 									<CardMedia
 										className={classes.media}
 										image={this.state.cropResult}
