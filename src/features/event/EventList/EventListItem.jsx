@@ -84,7 +84,7 @@ class EventListItem extends Component {
               }
             </React.Fragment>
           }
-          subheader={`${moment(date).format('dddd Do MMMM')} at ${moment(date).format('hh:mm A')}`}
+          subheader={`${moment(date).format('dddd Do MMMM YYYY')} at ${moment(date).format('hh:mm A')}`}
         />
         <CardContent>
           <Typography align="left" component="p">

@@ -8,6 +8,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
 /* MUI Icons */
@@ -52,19 +53,34 @@ const AllPhotosContainer = ({ classes, loading, profile, photos, handlePhotoDele
         justify="flex-start"
       >
         <Grid item xs={12} sm={6} md={6} lg={4}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardMedia
-                className={classes.media}
-                image={profile.photoURL || '/assets/user.png'}
-              />
-            </CardActionArea>
-            <CardActions>
-              <Button fullWidth size="small" variant="contained" color="primary">
-                Main Photo
-                </Button>
-            </CardActions>
-          </Card>
+          {
+            loading ?
+              (<CircularProgress
+                style={{
+                  position: 'relative',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-12px',
+                  marginLeft: '-12px',
+                  marginBottom: '20px'
+                }}
+              />) : (
+                <Card className={classes.card}>
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image={profile.photoURL || '/assets/user.png'}
+                    />
+                  </CardActionArea>
+                  <CardActions>
+                    <Button fullWidth size="small" variant="contained" color="primary">
+                      Main Photo
+                  </Button>
+                  </CardActions>
+                </Card>
+              )
+          }
+
         </Grid>
         {
           photos &&

@@ -50,14 +50,14 @@ class EventDetailsPage extends Component {
   }
 
   render() {
-    const { classes, event, auth, goingToEvent, cancelGoingToEvent, requesting, addEventComment, eventChat } = this.props;
+    const { classes, event, auth, goingToEvent, cancelGoingToEvent, requesting, addEventComment, eventChat, loading } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
-    const loading = Object.values(requesting).some(a => a === true);
+    const fullPageLoading = Object.values(requesting).some(a => a === true);
     const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
 
-    if (loading) return <LoadingComponent />
+    if (fullPageLoading) return <LoadingComponent />
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
@@ -69,6 +69,7 @@ class EventDetailsPage extends Component {
                 event={event}
                 goingToEvent={goingToEvent}
                 cancelGoingToEvent={cancelGoingToEvent}
+                loading={loading}
               />
               <EventDetailsInfo event={event} />
               <EventDetailsChat
@@ -98,6 +99,7 @@ const mapStateToProps = (state, ownProps) => {
     event,
     auth: state.firebase.auth,
     requesting: state.firestore.status.requesting,
+    loading: state.async.loading,
     eventChat:
       !isEmpty(state.firebase.data.event_chat) &&
       objectToArray(state.firebase.data.event_chat[ownProps.match.params.id])

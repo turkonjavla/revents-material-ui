@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid'; 
 import MenuItem from '@material-ui/core/MenuItem';
 
 /* Form Inputs */
@@ -154,7 +154,7 @@ class EventForm extends Component {
   }
 
   render() {
-    const { classes, invalid, submitting, pristine, event, cancelToggle } = this.props;
+    const { classes, invalid, submitting, pristine, event, cancelToggle, loading } = this.props;
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Script
@@ -241,14 +241,15 @@ class EventForm extends Component {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      disabled={pristine || invalid || submitting}
+                      disabled={pristine || invalid || submitting || loading}
                     >
                       Submit
                     </Button>
-                    <Button onClick={() => this.props.history.push('/events')}>Cancel</Button>
+                    <Button disabled={loading} onClick={() => this.props.history.push('/events')}>Cancel</Button>
                   </CardActions>
                   <CardActions style={{ justifyContent: 'center' }}>
                     <Button
+                      disabled={loading}
                       onClick={() => cancelToggle(!event.cancelled, event.id)}
                       type="button"
                       variant="outlined"
@@ -280,7 +281,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     initialValues: event,
-    event
+    event,
+    loading: state.async.loading
   }
 }
 
