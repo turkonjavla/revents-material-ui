@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { userIsAuthtenticated } from '../../features/auth/authWrapper';
 
 /* Components */
 import NavBar from '../../features/nav/NavBar/NavBar';
@@ -34,11 +35,11 @@ class App extends Component {
               <Switch>
                 <Route path="/events" component={EventDashboard} />
                 <Route path="/event/:id" component={EvetDetailsPage} />
-                <Route path="/manage/:id" component={EventForm} />
-                <Route path="/people" component={PeopleDashboard} />
-                <Route path="/profile/:id" component={UserDetailsPage} />
-                <Route path="/settings" component={SettingsDashboard} />
-                <Route path="/createEvent" component={EventForm} />
+                <Route path="/manage/:id" component={userIsAuthtenticated(EventForm)} />
+                <Route path="/people" component={userIsAuthtenticated(PeopleDashboard)} />
+                <Route path="/profile/:id" component={userIsAuthtenticated(UserDetailsPage)} />
+                <Route path="/settings" component={userIsAuthtenticated(SettingsDashboard)} />
+                <Route path="/createEvent" component={userIsAuthtenticated(EventForm)} />
                 <Route path="/test" component={TestComponent} />
               </Switch>
             </div>
