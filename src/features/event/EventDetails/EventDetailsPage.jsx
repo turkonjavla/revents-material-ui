@@ -18,6 +18,7 @@ import LoadingComponent from '../../../app/layout/LoadingComponent';
 /* Actions */
 import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
 import { addEventComment } from '../eventActions';
+import { openModal } from '../../modals/modalActions';
 
 const styles = theme => ({
   grid: {
@@ -50,12 +51,24 @@ class EventDetailsPage extends Component {
   }
 
   render() {
-    const { classes, event, auth, goingToEvent, cancelGoingToEvent, requesting, addEventComment, eventChat, loading } = this.props;
+    const {
+      classes,
+      event,
+      auth,
+      goingToEvent,
+      cancelGoingToEvent,
+      requesting,
+      addEventComment,
+      eventChat,
+      loading,
+      openModal
+    } = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees);
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
     const fullPageLoading = Object.values(requesting).some(a => a === true);
     const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
+    const authenticated = auth.isLoaded && !auth.isEmpty;
 
     if (fullPageLoading) return <LoadingComponent />
     return (
@@ -70,13 +83,18 @@ class EventDetailsPage extends Component {
                 goingToEvent={goingToEvent}
                 cancelGoingToEvent={cancelGoingToEvent}
                 loading={loading}
+                authenticated={authenticated}
+                openModal={openModal}
               />
               <EventDetailsInfo event={event} />
-              <EventDetailsChat
-                addEventComment={addEventComment}
-                eventId={event.id}
-                eventChat={chatTree}
-              />
+              {
+                authenticated &&
+                <EventDetailsChat
+                  addEventComment={addEventComment}
+                  eventId={event.id}
+                  eventChat={chatTree}
+                />
+              }
             </Grid>
             <Grid item xs={12} md={4}>
               <EventDetailsSidebar attendees={attendees} />
@@ -109,7 +127,8 @@ const mapStateToProps = (state, ownProps) => {
 const actions = {
   goingToEvent,
   cancelGoingToEvent,
-  addEventComment
+  addEventComment,
+  openModal
 }
 
 export default compose(

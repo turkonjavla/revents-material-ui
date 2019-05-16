@@ -11,7 +11,16 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingToEvent, loading }) => {
+const EventDetailsHeader = ({
+  event,
+  isHost,
+  isGoing,
+  goingToEvent,
+  cancelGoingToEvent,
+  loading,
+  authenticated,
+  openModal
+}) => {
   return (
     <Card style={{ marginBottom: '2em' }}>
       <CardMedia
@@ -35,23 +44,53 @@ const EventDetailsHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingT
           !isHost &&
           <div>
             {
-              isGoing ?
-                (
-                  <Button disabled={loading} onClick={() => cancelGoingToEvent(event)} size="small" variant="outlined">
+              <React.Fragment>
+                {
+                  isGoing &&
+                  <Button
+                    disabled={loading}
+                    onClick={() => cancelGoingToEvent(event)}
+                    size="small"
+                    variant="outlined"
+                  >
                     Cancel My Place
                     {
                       loading && <CircularProgress style={{ marginLeft: '0.5em' }} color="secondary" size={20} />
                     }
                   </Button>
-                ) :
-                (
-                  <Button disabled={loading} onClick={() => goingToEvent(event)} size="small" color="primary" variant="outlined">
+                }
+
+                {
+                  !isGoing &&
+                  authenticated &&
+                  <Button
+                    disabled={loading}
+                    onClick={() => goingToEvent(event)}
+                    size="small" color="primary"
+                    variant="outlined"
+                  >
+                    Join This Event
+                            {
+                      loading && <CircularProgress style={{ marginLeft: '0.5em' }} color="secondary" size={20} />
+                    }
+                  </Button>
+                }
+
+                {
+                  !authenticated &&
+                  <Button
+                    disabled={loading}
+                    onClick={() => openModal('UnauthModal')}
+                    size="small" color="primary"
+                    variant="outlined"
+                  >
                     Join This Event
                     {
                       loading && <CircularProgress style={{ marginLeft: '0.5em' }} color="secondary" size={20} />
                     }
                   </Button>
-                )
+                }
+              </React.Fragment>
             }
           </div>
         }

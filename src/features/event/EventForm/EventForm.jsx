@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
-import Grid from '@material-ui/core/Grid'; 
+import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 
 /* Form Inputs */
@@ -244,25 +244,30 @@ class EventForm extends Component {
                       color="primary"
                       disabled={pristine || invalid || submitting || loading}
                     >
-                      Submit
+                      {
+                        this.props.location.pathname.includes('/createEvent') ? 'Create Event' : 'Update Event'
+                      }
                       {
                         loading &&
-                        <CircularProgress size={20} style={{marginLeft: '0.5em'}} color="primary" />
+                        <CircularProgress size={20} style={{ marginLeft: '0.5em' }} color="primary" />
                       }
                     </Button>
                     <Button disabled={loading} onClick={() => this.props.history.push('/events')}>Cancel</Button>
                   </CardActions>
-                  <CardActions style={{ justifyContent: 'center' }}>
-                    <Button
-                      disabled={loading}
-                      onClick={() => cancelToggle(!event.cancelled, event.id)}
-                      type="button"
-                      variant="outlined"
-                      color={event.cancelled ? 'primary' : 'secondary'}
-                    >
-                      {event.cancelled ? 'Reactivate Event' : 'Cancel Event'}
-                    </Button>
-                  </CardActions>
+                  {
+                    this.props.location.pathname.includes('/manage') &&
+                    <CardActions style={{ justifyContent: 'center' }}>
+                      <Button
+                        disabled={loading}
+                        onClick={() => cancelToggle(!event.cancelled, event.id)}
+                        type="button"
+                        variant="outlined"
+                        color={event.cancelled ? 'primary' : 'secondary'}
+                      >
+                        {event.cancelled ? 'Reactivate Event' : 'Cancel Event'}
+                      </Button>
+                    </CardActions>
+                  }
                 </form>
               </Paper>
             </Grid>
