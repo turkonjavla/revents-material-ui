@@ -32,7 +32,7 @@ const PhotosPage = (props) => {
 
   const handleSetMainPhoto = photo => async () => {
     try {
-      setMainPhoto(photo);
+      await setMainPhoto(photo);
     }
     catch (error) {
       toastr.error('Oops', error.message);
