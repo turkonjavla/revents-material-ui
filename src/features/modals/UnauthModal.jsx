@@ -112,7 +112,6 @@ class LoginModal extends Component {
             Cancel
           </Button>
         </DialogContent>
-
       </Dialog>
     )
   }
