@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Loadable from 'react-loadable';
+import LoadingComponent from './LoadingComponent';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { userIsAuthtenticated } from '../../features/auth/authWrapper';
 
@@ -12,19 +14,59 @@ import UserDetailsPage from '../../features/user/UserDetails/UserDetailsPage';
 import PeopleDashboard from '../../features/user/PeopleDashboard/PeopleDashboard';
 import SettingsDashboard from '../../features/user/Settings/SettingsDashboard';
 import EventForm from '../../features/event/EventForm/EventForm';
-import TestComponent from '../../features/testarea/TestComponent';
 import NotFound from './NotFound';
 
 /* Modal Manager */
 import ModalManager from '../../features/modals/ModalManager';
 
+const AsyncNavBar = Loadable({
+  loader: () => import('../../features/nav/NavBar/NavBar'),
+  loading: LoadingComponent
+});
+const AsyncHomePage = Loadable({
+  loader: () => import('../../features/home/HomePage'),
+  loading: LoadingComponent
+});
+const AsyncEvetDetailsPage = Loadable({
+  loader: () => import('../../features/event/EventDetails/EventDetailsPage'),
+  loading: LoadingComponent
+});
+const AsyncEventDashboard = Loadable({
+  loader: () => import('../../features/event/EventDashboard/EventDashboard'),
+  loading: LoadingComponent
+});
+const AsyncUserDetailsPage = Loadable({
+  loader: () => import('../../features/user/UserDetails/UserDetailsPage'),
+  loading: LoadingComponent
+});
+const AsyncPeopleDashboard = Loadable({
+  loader: () => import('../../features/user/PeopleDashboard/PeopleDashboard'),
+  loading: LoadingComponent
+});
+const AsyncSettingsDashboard = Loadable({
+  loader: () => import('../../features/user/Settings/SettingsDashboard'),
+  loading: LoadingComponent
+});
+const AsyncEventForm = Loadable({
+  loader: () => import('../../features/event/EventForm/EventForm'),
+  loading: LoadingComponent
+});
+const AsyncNotFound = Loadable({
+  loader: () => import('./NotFound'),
+  loading: LoadingComponent
+});
+const AsyncModalManager = Loadable({
+  loader: () => import('../../features/modals/ModalManager'),
+  loading: LoadingComponent
+});
+
 class App extends Component {
   render() {
     return (
       <div>
-        <ModalManager />
+        <AsyncModalManager />
         <Switch>
-          <Route exact path="/" component={HomePage} />
+          <Route exact path="/" component={AsyncHomePage} />
         </Switch>
 
         <Route
@@ -32,17 +74,16 @@ class App extends Component {
           render={() => (
             <div>
               <CssBaseline />
-              <NavBar />
+              <AsyncNavBar />
               <Switch>
-                <Route path="/events" component={EventDashboard} />
-                <Route path="/event/:id" component={EvetDetailsPage} />
-                <Route path="/manage/:id" component={userIsAuthtenticated(EventForm)} />
-                <Route path="/people" component={userIsAuthtenticated(PeopleDashboard)} />
-                <Route path="/profile/:id" component={userIsAuthtenticated(UserDetailsPage)} />
-                <Route path="/settings" component={userIsAuthtenticated(SettingsDashboard)} />
-                <Route path="/createEvent" component={userIsAuthtenticated(EventForm)} />
-                <Route path="/test" component={TestComponent} />
-                <Route component={NotFound} />
+                <Route path="/events" component={AsyncEventDashboard} />
+                <Route path="/event/:id" component={AsyncEvetDetailsPage} />
+                <Route path="/manage/:id" component={userIsAuthtenticated(AsyncEventForm)} />
+                <Route path="/people" component={userIsAuthtenticated(AsyncPeopleDashboard)} />
+                <Route path="/profile/:id" component={userIsAuthtenticated(AsyncUserDetailsPage)} />
+                <Route path="/settings" component={userIsAuthtenticated(AsyncSettingsDashboard)} />
+                <Route path="/createEvent" component={userIsAuthtenticated(AsyncEventForm)} />
+                <Route component={AsyncNotFound} />
               </Switch>
             </div>
           )}
