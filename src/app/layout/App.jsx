@@ -6,19 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { userIsAuthtenticated } from '../../features/auth/authWrapper';
 
 /* Components */
-import NavBar from '../../features/nav/NavBar/NavBar';
-import HomePage from '../../features/home/HomePage';
-import EvetDetailsPage from '../../features/event/EventDetails/EventDetailsPage';
-import EventDashboard from '../../features/event/EventDashboard/EventDashboard';
-import UserDetailsPage from '../../features/user/UserDetails/UserDetailsPage';
-import PeopleDashboard from '../../features/user/PeopleDashboard/PeopleDashboard';
-import SettingsDashboard from '../../features/user/Settings/SettingsDashboard';
-import EventForm from '../../features/event/EventForm/EventForm';
-import NotFound from './NotFound';
-
-/* Modal Manager */
-import ModalManager from '../../features/modals/ModalManager';
-
 const AsyncNavBar = Loadable({
   loader: () => import('../../features/nav/NavBar/NavBar'),
   loading: LoadingComponent
