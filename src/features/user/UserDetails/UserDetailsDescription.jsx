@@ -4,6 +4,7 @@ import moment from 'moment';
 /* MUI Components */
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -18,11 +19,12 @@ const UserDetailsDescription = ({ classes, profile }) => {
   let createdAt;
 
   if (profile.createdAt) {
-    createdAt = moment(profile.createdAt).format('MMMM Do YYYY');
+    createdAt = moment(profile.createdAt).format('Do MMM YYYY');
   }
-  
+
   return (
     <Card className={classes.card}>
+      <Button onClick={() => console.log(createdAt)}>Date</Button>
       <Grid container>
         <Grid item xs={12} sm={8}>
           <CardContent>

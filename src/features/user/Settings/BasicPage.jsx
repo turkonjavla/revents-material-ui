@@ -15,7 +15,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import FormLabel from '@material-ui/core/FormLabel';
 import CardHeader from '@material-ui/core/CardHeader';
 
@@ -49,7 +49,7 @@ const BasicPage = (props) => {
   }
 
   return (
-    <Card>
+    <Paper>
       <CardHeader
         action={
           <SettingsNav />
@@ -112,7 +112,7 @@ const BasicPage = (props) => {
         </Button>
         </CardActions>
       </form>
-    </Card>
+    </Paper>
   )
 }
 

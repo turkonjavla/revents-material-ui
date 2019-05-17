@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 
 /* MUI Components */
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -44,7 +44,7 @@ const AboutPage = (props) => {
   }
 
   return (
-    <Card>
+    <Paper>
       <CardHeader
         action={
           <SettingsNav />
@@ -134,7 +134,7 @@ const AboutPage = (props) => {
             </Button>
         </CardActions>
       </form>
-    </Card>
+    </Paper>
   )
 }
 
