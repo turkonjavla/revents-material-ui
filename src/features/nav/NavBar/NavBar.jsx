@@ -136,9 +136,6 @@ class NavBar extends Component {
                 <ListItemText primary="People Dashboard" />
               </ListItem>
             }
-            <ListItem button component={Link} to="/test" selected={'/test' === pathname}>
-              <ListItemText primary="Test Area" />
-            </ListItem>
           </div>
         </Drawer>
       </div>
