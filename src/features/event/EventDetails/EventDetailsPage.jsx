@@ -3,6 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirestore, firebaseConnect, isEmpty } from 'react-redux-firebase';
 import { objectToArray, createDataTree } from '../../../app/common/util/helpers';
+import { toastr } from 'react-redux-toastr';
 
 /* MUI Components */
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -39,10 +40,21 @@ const styles = theme => ({
 });
 
 class EventDetailsPage extends Component {
+  state = {
+    initialLoading: true
+  }
 
   async componentDidMount() {
     const { firestore, match } = this.props;
+    let event = await firestore.get(`events/${match.params.id}`);
+    if(!event.exists) {
+      toastr.error('Not Found', 'Can\'t find the event your looking for');
+      this.props.history.push('/error');
+    }
     await firestore.setListener(`events/${match.params.id}`);
+    this.setState({
+      initialLoading: false
+    })
   }
 
   async componentWillUnmount() {
@@ -61,16 +73,19 @@ class EventDetailsPage extends Component {
       addEventComment,
       eventChat,
       loading,
-      openModal
+      openModal,
+      match
     } = this.props;
-    const attendees = event && event.attendees && objectToArray(event.attendees);
+    const attendees = event && event.attendees && objectToArray(event.attendees).sort(function(a, b) {
+      return a.joinDate - b.joinDate
+    });
     const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a => a.id === auth.uid);
-    const fullPageLoading = Object.values(requesting).some(a => a === true);
     const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
+    const loadingEvent = requesting[`events/${match.params.id}`]
     const authenticated = auth.isLoaded && !auth.isEmpty;
 
-    if (fullPageLoading) return <LoadingComponent />
+    if (loadingEvent || this.state.initialLoading) return <LoadingComponent />
     return (
       <Grid container justify="center" style={{ marginTop: '2em' }}>
         <Grid spacing={24} alignItems="center" justify="center" container className={classes.grid}>
@@ -134,6 +149,6 @@ const actions = {
 export default compose(
   withFirestore,
   connect(mapStateToProps, actions),
-  firebaseConnect(props => ([`event_chat/${props.match.params.id}`])),
+  firebaseConnect(props => props.auth.isLoaded && !props.auth.isEmpty && [`event_chat/${props.match.params.id}`]),
   withStyles(styles)
 )(EventDetailsPage)

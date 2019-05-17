@@ -255,7 +255,7 @@ class EventForm extends Component {
                     <Button disabled={loading} onClick={() => this.props.history.push('/events')}>Cancel</Button>
                   </CardActions>
                   {
-                    this.props.location.pathname.includes('/manage') &&
+                    event.id &&
                     <CardActions style={{ justifyContent: 'center' }}>
                       <Button
                         disabled={loading}

@@ -13,6 +13,7 @@ import PeopleDashboard from '../../features/user/PeopleDashboard/PeopleDashboard
 import SettingsDashboard from '../../features/user/Settings/SettingsDashboard';
 import EventForm from '../../features/event/EventForm/EventForm';
 import TestComponent from '../../features/testarea/TestComponent';
+import NotFound from './NotFound';
 
 /* Modal Manager */
 import ModalManager from '../../features/modals/ModalManager';
@@ -41,6 +42,7 @@ class App extends Component {
                 <Route path="/settings" component={userIsAuthtenticated(SettingsDashboard)} />
                 <Route path="/createEvent" component={userIsAuthtenticated(EventForm)} />
                 <Route path="/test" component={TestComponent} />
+                <Route component={NotFound} />
               </Switch>
             </div>
           )}

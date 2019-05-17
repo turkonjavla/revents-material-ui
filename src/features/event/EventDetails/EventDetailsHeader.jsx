@@ -47,6 +47,7 @@ const EventDetailsHeader = ({
               <React.Fragment>
                 {
                   isGoing &&
+                  !event.cancelled &&
                   <Button
                     disabled={loading}
                     onClick={() => cancelGoingToEvent(event)}
@@ -63,6 +64,7 @@ const EventDetailsHeader = ({
                 {
                   !isGoing &&
                   authenticated &&
+                  !event.cancelled &&
                   <Button
                     disabled={loading}
                     onClick={() => goingToEvent(event)}
@@ -70,7 +72,7 @@ const EventDetailsHeader = ({
                     variant="outlined"
                   >
                     Join This Event
-                            {
+                    {
                       loading && <CircularProgress style={{ marginLeft: '0.5em' }} color="secondary" size={20} />
                     }
                   </Button>
@@ -78,6 +80,7 @@ const EventDetailsHeader = ({
 
                 {
                   !authenticated &&
+                  !event.cancelled &&
                   <Button
                     disabled={loading}
                     onClick={() => openModal('UnauthModal')}
@@ -93,6 +96,11 @@ const EventDetailsHeader = ({
               </React.Fragment>
             }
           </div>
+        }
+        {
+          event.cancelled &&
+          !isHost &&
+          <Typography variant="subheading" style={{color: '#f44336'}}>This event has been cancelled</Typography>
         }
         {
           isHost &&
