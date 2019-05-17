@@ -1,6 +1,9 @@
 # Revents
 
-An app built with React/redux. Allows users to Register and sign up to events, post new events and chat about events
+An app built with React/Redux. Allows users to Register and sign up to events, post new events and chat about events
+
+Project Demo: [Revents](https://revents-237107.firebaseapp.com/events)
+
 ## Built With
 
 * [React](https://reactjs.org/)
