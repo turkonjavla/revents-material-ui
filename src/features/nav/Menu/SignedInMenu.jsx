@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider';
 
 /* MUI Icons */
 import AddIcon from '@material-ui/icons/Add';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import PersonIcon from '@material-ui/icons/Person';
 import HomeIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
@@ -81,14 +80,7 @@ class SignedInLinks extends Component {
             <ListItemText inset primary={"Create Event"} />
           </MenuItem>
 
-          <MenuItem onClick={this.handleClose}>
-            <ListItemIcon>
-              <CalendarTodayIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="My Events" />
-          </MenuItem>
-
-          <MenuItem onClick={this.handleClose}>
+          <MenuItem onClick={this.handleClose} component={Link} to="/people" selected={'/people' === pathname}>
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
